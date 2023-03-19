@@ -13,14 +13,9 @@ const download = document.querySelector('.Download');
 const interactionContainer = document.querySelector(".interaction__container");
 const loadingResponse = document.querySelector(".loading-response");
 const result = document.querySelector(".result");
-
-let conversation =  [  
-  {
-    role: "system",
-    content: "You are an experienced life and mental coach. Start by asking your client the first question, which should encourage self-reflection. Follow the User instructions to complete the interaction."
-  },
-  {    role: "user",    content: "You are an experienced life and mental coach with a proven record of helping people attain greater fulfilment. Your role involves guiding clients in enhancing their relationships, careers, and everyday lives by clarifying their goals, identifying obstacles, and developing strategies to overcome these challenges. You will engage in a session with a client. Begin by asking the first question, which should encourage self-reflection. Use deep questions and always only start with the question."  }
-];
+let userName;
+let focusArea;
+let conversation = [];
 
 
 
@@ -104,7 +99,35 @@ function updateDomAfterFetch(questionText) {
 
 
 
-generateBtn.addEventListener("click", async function() {
+generateBtn.addEventListener("click", async function(e) {
+  e.preventDefault();
+  // set the user name and focus area
+  userName = document.querySelector("#userName").value;
+  focusArea = document.querySelector("#focusArea").value;
+
+  conversation = [
+    {
+      role: "system",
+      content: "You are an experienced life and mental coach. Start by asking your client the first question, which should encourage self-reflection. Follow the User instructions to complete the interaction."
+    },
+    {
+      role: "user",
+      content: `Act as an experienced life and mental coach with a proven record of helping people attain greater fulfilment. Your role involves guiding clients in enhancing their relationships, careers, and everyday lives by clarifying their goals, identifying obstacles, and developing strategies to overcome these challenges. Here are some criteria that yoou must follow as a coach:Active Listening: A coach must actively listen to their clients, empathize with them, and understand their unique perspectives and experiences to provide tailored guidance.
+
+      Clear Communication: A coach must be able to communicate clearly and effectively, both verbally and nonverbally, to help their clients understand the coaching process and the strategies being recommended.
+      
+      Goal-Setting: A coach must work with their clients to set specific, measurable, achievable, relevant, and time-bound (SMART) goals that align with their clients' values and aspirations.
+      
+      Action-Oriented Approach: A coach must help their clients develop actionable plans and strategies to achieve their goals and hold them accountable for taking concrete steps towards progress.
+      
+      Trust and Confidentiality: A coach must maintain a trusting and confidential relationship with their clients to ensure that clients feel safe and comfortable sharing their deepest concerns and challenges.
+      
+      Flexibility and Adaptability: A coach must be able to adapt their coaching approach and strategies to the unique needs and goals of each client, as well as adjust their approach if necessary as the coaching process progresses.
+      
+      Positive Reinforcement: A coach must provide positive reinforcement and encouragement to help their clients stay motivated and continue making progress towards their goals. .You will engage in a session with ${userName}, focusing on the area of ${focusArea}. Begin by asking the first question, which should encourage self-reflection in ${focusArea} but try not to overwhelm me by asking too deep question straight away. you will address me as ${userName}. Your first response should be: Hello ${userName}, [First Question]`
+    }
+  ];
+  
   getQuestion();
   
   heroDiv.classList.add('moveOut');
@@ -132,11 +155,11 @@ answerBtn.addEventListener("click", async function(e) {
   // collect the input value in a variable to pass to the server as a POST request
   let userInput = textarea.value;
   if (currentQuestion === 3) {
-    userInput = userInput + " " + "Provide an Insight, and assign three specific tasks for my next session. Can you please format the response as follows: Insight: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3>. The '%%' is important don't avoid it. for example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing.";
+    userInput = userInput + " " + "Provide an Insight, and assign three specific tasks for next session. Set task that are managable, trackable and attainable. You will follow up on those task in the next session. Can you please format the response as follows: Insight: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3>. The '%%' is important don't avoid it. for example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing.";
     conversation = [...conversation, {role: "user", content: userInput}];
   }
   if (currentQuestion === 2) {
-    userInput = userInput + " " + "Ask a follow-up question to further guide my self-exploration.";
+    userInput = userInput + " " + " Stay in carachter and ask a question that will help you understand the client better.";
     conversation = [...conversation, {role: "user", content: userInput}];
   }
   
@@ -241,7 +264,6 @@ const getQuestion = async () => {
     answerBtn.disabled = true;
     updateDomAfterFetch(questionText);
     conversation = [...conversation, {role: "assistant", content: questionText}];
-    console.log(conversation);
 
   } catch (error) {
     console.error(error);

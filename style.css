@@ -64,7 +64,6 @@ h1 {
   line-height: 1.1;
   letter-spacing: -0.025em;
   font-weight: 700;
-  max-width: 10ch;
 }
 
 h3 {
@@ -114,8 +113,20 @@ input{
   background-color: #F8F0E4;
   border: none;
 }
-
-button {
+select{
+  width: 100%;
+  padding: 1.2rem 0.9rem;
+  border-radius: 2rem;
+  color: #1C1E1C;
+  background-color: #F8F0E4;
+  border: none;
+}
+option{
+  color: #1C1E1C;
+  background-color: #F8F0E4;
+  padding: 1.2rem 0.9rem;
+}
+button, .btn {
   border-radius: 8rem;
   padding: 1.2rem 2rem;
   font-size: 1.2rem;
@@ -151,6 +162,16 @@ header {
     1fr
     auto
     ;
+}
+
+.container{
+  max-width: 90vw;
+  margin: 0 auto;
+}
+.flex-flow{
+  display: flex;
+  gap: 1rem;
+  align-items: start;
 }
 
 .logo {
@@ -198,8 +219,17 @@ nav{
   display: grid;
   grid-template-columns: 1fr 0.65fr 0.2fr 1fr;
   overflow: hidden;
-  transform: translateY(-10%);
+  /* transform: translateY(-10%); */
 }
+
+.startingForm{
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  gap: 2rem;
+}
+
+
 
 .hero-banner{
   margin: auto 0;

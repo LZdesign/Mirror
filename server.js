@@ -42,7 +42,7 @@ app.post('/insight', async (req, res) => {
     const prompt = req.body.prompt;
 
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: prompt,
       max_tokens: 500
     });

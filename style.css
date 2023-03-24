@@ -226,6 +226,9 @@ nav{
   background: #fff;
   padding: 2rem;
   border-radius: 1rem;
+  flex-direction: column;
+  align-content: start;
+  justify-content: start;
   gap: 2rem;
 }
 

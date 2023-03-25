@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { Configuration, OpenAIApi } from "openai";
 import express from 'express';
 import cors from 'cors';
+import Stripe from 'stripe';
 
 
 const configuration = new Configuration({
@@ -20,6 +21,24 @@ const getCompletion = async (prompt) => {
         max_tokens: 500
     });
 };
+
+// call stripe  
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+
+
+app.post('/create-payment-intent', async (req, res) => {
+  const { amount } = req.body;
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount,
+    currency: 'eur',
+    
+  
+  });
+
+  res.json({ client_secret: paymentIntent.client_secret });
+});
+
 
 app.post('/questions', async (req, res) => {
     try {
@@ -46,3 +65,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+

@@ -27,7 +27,7 @@ async function writeQuestion(questionText) {
   answerBtn.disabled = false;
 }
 
-function handleNextQuestion(followUpText) {
+async function handleNextQuestion(followUpText) {
   const el = progress.querySelector(`div[data-step='${currentQuestion}']`);
   el.classList.add('complete');
   question.textContent = "";
@@ -35,10 +35,37 @@ function handleNextQuestion(followUpText) {
   if (currentQuestion <= 3) {
     writeQuestion(followUpText);
     progress.querySelector(`div[data-step='${currentQuestion}']`).classList.add('active');
+    document.querySelector('.current-question').textContent = currentQuestion;
   } else {
+    // Handle insights and tasks display when current question is 3
+    const insight = followUpText;
+    conversation = [...conversation, { role: "assistant", content: insight }];
+
+    // split the insight into Insight and Tasks
+    const insightArray = insight.split('%%Tasks:');
+    const insightText = insightArray[0];
+    const tasks = insightArray[1];
+
+    const insightTextEl = document.querySelector('.insightText');
+    const tasksEl = document.querySelector('.tasks');
+
+    // Convert the tasks into an array and display them in the DOM
+    const tasksArray = tasks.trim().split(/\d+\./).filter(task => task.trim() !== '');
+    const tasksList = document.querySelector('.tasksList');
+    tasksList.innerHTML = '';
+
+    tasksArray.forEach(task => {
+      const li = document.createElement('li');
+      li.textContent = task.trim();
+      tasksList.appendChild(li);
+    });
+
+    insightTextEl.textContent = insightText;
+
     animate();
   }
 }
+
 
 async function animate() {
   interactionContainer.style.transform = "translateY(-200%)";
@@ -94,6 +121,7 @@ async function fetchQuestion() {
     },
     body: JSON.stringify({
       prompt: conversation
+      
     })
   });
 
@@ -146,35 +174,57 @@ generateBtn.addEventListener('click', async (e) => {
   writeQuestion(questionText);
 });
 
-answerBtn.addEventListener("click", async (e) => {
+answerBtn.addEventListener("click", async function(e) {
   e.preventDefault();
-
   
-  if (!textarea.value) {
-    textarea.classList.add('error', 'shake');
-    textarea.addEventListener('animationend', () => {
-      textarea.classList.remove('error', 'shake');
-    });
+  const userInput = textarea.value.trim();
+  
+  if (!userInput) {
+    displayError('Please enter your response');
     return;
   }
 
   answerBtn.disabled = true;
   answerBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
 
-  let userInput = textarea.value;
-  const userRole = { role: "user", content: userInput };
-  conversation.push(userRole);
+  let content;
+  
+  if (currentQuestion === 3) {
+    content = userInput + " " + "Provide an Insight, and assign three specific tasks for next session. Set task that are manageable, trackable, and attainable. The goal is to keep the user accountable in the following sessions. You will follow up on those tasks in the next session. Can you please format the response as follows: Insight: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3>. The '%%' is important, don't avoid it. For example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing.";
+  } else {
+    content = " Provide a follow-up question that will help you to understand the client's perspective on their reflection. " + userInput;
+  }
 
-  const followUpText = await fetchQuestion();
-  const assistantRole = { role: "assistant", content: followUpText };
-  conversation.push(assistantRole);
+  conversation = [...conversation, {role: "user", content: content}];
 
-  answerBtn.innerHTML = 'Answer';
-  answerBtn.disabled = true;
-  textarea.value = '';
+  // Send the userInput to the server
+  try {
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-type' : 'application/json'
+      },
+      body: JSON.stringify({
+        prompt: conversation
+      })
+    })
 
-  handleNextQuestion(followUpText);
+    const data = await response.json();
+    const followUpText = data.message.trim();
+    const assistantRole = { role: "assistant", content: followUpText };
+    conversation.push(assistantRole);
+
+    answerBtn.innerHTML = 'Answer';
+    answerBtn.disabled = true;
+    textarea.value = '';
+
+    handleNextQuestion(followUpText);
+
+  } catch (error) {
+    console.error(error);
+  }
 });
+
 
 download.addEventListener("click", () => {
   const downloadReport = document.querySelector('.DownloadReport');
@@ -182,4 +232,40 @@ download.addEventListener("click", () => {
   downloadReport.classList.remove('hidden');
   result.style.transform = 'translateY(200%)';
   result.classList.add('hidden');
+});
+
+
+// Replace 'your_publishable_key' with your Stripe Publishable API Key
+const stripe = Stripe('pk_live_UokfO3BfglTlhkt0XZ4HJtQe');
+
+document.getElementById('donation-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const donationAmount = parseFloat(document.getElementById('donation-amount').value) * 100;
+
+  // Create a PaymentIntent on your server
+  const response = await fetch('/create-payment-intent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: donationAmount })
+  });
+
+  const responseBody = await response.text();
+  console.log('Response from server:', responseBody);
+  const { client_secret } = JSON.parse(responseBody);
+
+  // Confirm the PaymentIntent using Stripe.js
+  const result = await stripe.confirmCardPayment(client_secret, {
+    payment_method: {
+      card: cardElement
+    }
+  });
+
+  if (result.error) {
+    // Show an error message
+    console.error(result.error.message);
+  } else {
+    // Donation was successful
+    console.log('Donation successful:', result.paymentIntent);
+  }
 });

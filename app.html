@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite App</title>
 
+  <script src="https://js.stripe.com/v3/"></script>
 
 </head>
 
@@ -122,8 +123,8 @@
             </div>
 
             <div class="DownloadReport hidden">
-              <h3>Thank you for using our app! </h3>
-              <p>Continue on your personal growth journey with a personalized report. This report includes actionable steps and additional resources.</p>
+              <h3>Thank you for you interest in Mirror.</h3>
+              <p>We admire people like you interested in embarcing in their personal growth journey. We are working really hard to make Mirror the best coach and asisstant for your journey. Leave us your email, so we can reach out to you when the full-app is ready.</p>
               <form>
                 <label for="name">Enter your name</label>
                 <input type="name" name="FirstName" id="name" placeholder="Enter your name">
@@ -133,6 +134,17 @@
 
                 <button class="SubmitInfo">Send Request</button>
               </form>
+
+              <div class="help">
+                <p>Donations are not required but are greatly appreciated. Your donation will help us continue to build Mirror and make it available to everyone.</p>
+                
+                <form id="donation-form">
+                  <!-- <label for="donation-amount">Donation Amount:</label>
+                  <input type="number" id="donation-amount" name="donation-amount" step="0.01" min="1" placeholder="Enter amount" required>
+                  <button type="submit" id="donate-btn">Donate</button> -->
+                  <button><a href="https://buy.stripe.com/9AQ4gO4xzd2W1vG000">Donate</a></button>
+                </form>
+              </div>
             </div>
 
           </div>

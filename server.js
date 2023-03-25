@@ -3,6 +3,12 @@ import { Configuration, OpenAIApi } from "openai";
 import express from 'express';
 import cors from 'cors';
 import Stripe from 'stripe';
+import MailerLite from '@mailerlite/mailerlite-nodejs';
+
+
+const mailerLite = new MailerLite({
+  api_key: process.env.MAILERLITE_API_KEY
+});
 
 
 const configuration = new Configuration({
@@ -22,10 +28,7 @@ const getCompletion = async (prompt) => {
     });
 };
 
-// call stripe  
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-
 
 app.post('/create-payment-intent', async (req, res) => {
   const { amount } = req.body;
@@ -37,6 +40,39 @@ app.post('/create-payment-intent', async (req, res) => {
   });
 
   res.json({ client_secret: paymentIntent.client_secret });
+});
+
+const addSubscriber = async (email, name, groupId) => {
+  const params = {
+    email,
+    fields: {
+      name
+    },
+    groups: [groupId],
+    status: "active"
+  };
+
+  try {
+    const response = await mailerLite.subscribers.createOrUpdate(params);
+    console.log(response.data);
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response.data);
+    }
+  }
+};
+
+
+app.post('/subscribe', async (req, res) => {
+  const { email, name, groupId } = req.body;
+
+  try {
+    const subscriber = await addSubscriber(email, name, groupId);
+    res.status(200).send({ message: 'Subscriber added successfully', subscriber });
+  } catch (error) {
+    console.error('Error adding subscriber:', error);
+    res.status(500).send({ error });
+  }
 });
 
 

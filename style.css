@@ -492,6 +492,43 @@ nav{
   list-style: decimal-leading-zero;
 }
 
+.help{
+  display: grid;
+  place-content: center;
+  padding: 2rem;
+  background-color: #ADC7D6;
+  border-radius: 2rem;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  color: #3954A5;
+}
+#donation-form{
+  align-self: center;
+  align-items: end;
+}
+#donation-form a {
+  background-color: #3954A5;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 100vh;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.024em;
+  cursor: pointer;
+  transition: all 0.4s ease-out;
+}
+.donation-header{
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: -0.024em;
+  margin: 1rem 0;
+}
+.donation-paragraph span{
+  font-weight: 700;
+  letter-spacing: -0.024em;
+}
 /* style the error div and give it a transition plus a transform translate */
 .errorMessage {
   transform: translateY(-100%);

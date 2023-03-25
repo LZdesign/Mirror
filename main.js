@@ -1,5 +1,3 @@
-import './style.css';
-
 const generateBtn = document.querySelector("button.generate-question");
 const HeroBanner = document.querySelector(".hero-banner");
 const heroDiv = document.querySelector(".hero-div");
@@ -268,4 +266,62 @@ document.getElementById('donation-form').addEventListener('submit', async (e) =>
     // Donation was successful
     console.log('Donation successful:', result.paymentIntent);
   }
+});
+
+
+
+document.querySelector('.SubmitInfo').addEventListener('click', async (e) => {
+  e.preventDefault();
+
+  const submitInfoBtn = e.target;
+  const greeting = document.getElementById('greeting');
+  
+  // set the name to the value of the userrName variable
+  const name = userName;
+  const email = document.getElementById('email').value;
+  const groupId = '83635650801174350';
+    // Check if email is valid
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isEmailValid = emailPattern.test(email);
+  
+    if (!isEmailValid) {
+      // add error and shake animation to email input
+      document.getElementById('email').classList.add('error', 'shake');
+      // remove error and shake animation after 1 second
+      setTimeout(() => {
+        document.getElementById('email').classList.remove('error', 'shake');
+      }, 1000);
+
+
+      submitInfoBtn.disabled = false;
+      submitInfoBtn.innerHTML = 'Submit Info';
+      return;
+    }
+  
+  if (name && email) {
+    submitInfoBtn.disabled = true;
+    submitInfoBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+
+    try {
+      const response = await fetch('http://localhost:3000/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, groupId }),
+      });
+
+      if (response.ok) {
+        greeting.textContent = `Thanks for signing up! I'll be in touch soon.`;
+        console.log('Successfully added subscriber:', await response.json());
+        submitInfoBtn.disabled = false;
+        submitInfoBtn.classList.add('hidden');
+      } else {
+        greeting.textContent = `Something went wrong. Please try again.`;
+        console.error('Error adding subscriber:', await response.json());
+      }
+    } catch (error) {
+      console.error('Error adding subscriber:', error);
+    }
+  }
+
+  
 });

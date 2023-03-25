@@ -23,10 +23,12 @@
     <main>
       <!-- Hero Banner -->
       <div class="grid">
-        <div class="hero-div">
-          <h1>A moment of Self Reflection</h1>
-          <p class="body">Unlock your potential with AI-powered coaching and self-reflection</p>
-          <form id="user-details">
+        <div class="hero-div flex-flow">
+          <div class="header flex-item">
+            <h1>A moment of Self Reflection</h1>
+            <p class="body">Unlock your potential with AI-powered coaching and self-reflection</p>
+          </div>
+          <form class="flex-item" id="user-details">
             <div class="startingForm flex-flow ">
 
               <div class="userName_container">
@@ -58,14 +60,17 @@
               <!-- add another input that allows user to wirte down exactly what they want to go deeper into based on their area of focus -->
               <div>
                 <label for="area-of-improvement">What specifically?</label>
-                <input type="text" id="focusAreaDetail" name="area-of-improvement" placeholder="Ex. I don't feel like myself lately">
+                <textarea id="focusAreaDetail" name="area-of-improvement" placeholder="Ex. I don't feel like myself lately" rows="3" style="resize: vertical;"></textarea>
               </div>
               
+              <!-- add error div for when user input -->
+              <div class="errorDiv">
+                <div class="errorMessage">  
+                </div>
+              </div>
               
-
+              <button class="generate-question">Generate Question</button>
           </div>
-            
-            <button class="generate-question">Generate Question</button>
           </form>
         </div>
         <section class="hero-banner">
@@ -80,6 +85,10 @@
                 <div class="progress-bar"></div>
                 <div data-step="3" class="question-icon-circle "></div>
               </div>            
+
+              <div class="question-counter">
+                <p>Question <span class="current-question">1</span> of <span class="total-questions">3</span></p>
+              </div>
               
               <div class="question" data-set>
                 <h3></h3>
@@ -108,7 +117,7 @@
                 
               </ul>
               
-              <p>If yuo are interested in being a Beta tester for the full-experience app we are building. Sign up below</p>
+              <p>This was just a simple interaction with our AI coach. If you wish to be a Beta tester for the full-experience app where you will be able to follow up on the interaction, track your tasks and much more. Sign up below</p>
               <button class="Download">Register Now.</button>              
             </div>
 

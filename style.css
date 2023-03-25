@@ -171,7 +171,10 @@ header {
 .flex-flow{
   display: flex;
   gap: 1rem;
-  align-items: start;
+  flex-wrap: wrap;
+}
+.flex-item{
+  flex: 1;
 }
 
 .logo {
@@ -252,14 +255,11 @@ nav{
 }
 
 .hero-div{
-  max-width: 50dvw;
-  max-width: 50vw;
   margin: auto 0;
   grid-column: 1 / -1;
   grid-row: 1;
   position: relative;
   top: 0;
-  padding: 4rem 0;
   transition: all 0.8s ease-in;
 }
 
@@ -274,7 +274,6 @@ nav{
     grid-row: 2;
     padding: 0;
     margin: 0;
-    transform: translateY(-15%);
     z-index: 10;
   }
   .illustration{
@@ -492,11 +491,20 @@ nav{
   list-style: decimal-leading-zero;
 }
 
-@media (max-width: 620px) {
-  .moveIn{
-    transform: translateY(-60%);
-    z-index: 9;
-  }
+/* style the error div and give it a transition plus a transform translate */
+.errorMessage {
+  transform: translateY(-100%);
+  transition: all 0.5s ease-in-out;
+  opacity: 0;
+  background-color: #1C1E1C;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 100vh;
+}
+.errorDiv{
+  height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
 }
 
 @keyframes shake {

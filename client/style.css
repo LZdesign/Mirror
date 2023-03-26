@@ -36,6 +36,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --paddingBox: calc(0.5rem + 2vw);
+  --paddingFormsInput: 1.2rem 0.9rem;
 }
 
 
@@ -93,7 +96,7 @@ textarea{
   width: 100%;
   background-color: #F8F0E4;
   border: none;
-  padding: calc(0.5rem + 2vw);
+  padding: var(--paddingFormsInput);
   border-radius: 1.2rem;
   color: #1C1E1C;
   min-height: 10rem;
@@ -107,7 +110,7 @@ input:focus, input:focus-visible, input:active
 
 input{
   width: 100%;
-  padding: 1.2rem 0.9rem;
+  padding: var(--paddingFormsInput);
   border-radius: 2rem;
   color: #1C1E1C;
   background-color: #F8F0E4;
@@ -115,7 +118,7 @@ input{
 }
 select{
   width: 100%;
-  padding: 1.2rem 0.9rem;
+  padding: var(--paddingFormsInput);
   border-radius: 2rem;
   color: #1C1E1C;
   background-color: #F8F0E4;
@@ -124,7 +127,7 @@ select{
 option{
   color: #1C1E1C;
   background-color: #F8F0E4;
-  padding: 1.2rem 0.9rem;
+  padding: var(--paddingFormsInput) ;
 }
 button, .btn {
   border-radius: 8rem;
@@ -155,7 +158,7 @@ header {
   min-height: 100dvh;
   margin: 0 auto;
   max-width: 1680px;
-  padding: min(1.5rem, 1rem) calc(1rem + 4vw);
+  padding: min(1rem, 2vw) calc(1rem + 2vw);
   display: grid;
   gap: 2rem;
   grid-template-rows: 
@@ -175,7 +178,7 @@ header {
   flex-wrap: wrap;
 }
 .flex-item{
-  flex: 1;
+  flex: 1 300px;
 }
 
 .logo {
@@ -228,7 +231,7 @@ nav{
 
 .startingForm{
   background: #fff;
-  padding: 2rem;
+  padding: var(--paddingBox);
   border-radius: 1rem;
   flex-direction: column;
   align-content: start;
@@ -297,8 +300,8 @@ nav{
 
 .interaction{
   background-color: #fff;
-  padding: calc(1rem + 4vw);
-  border-radius:  calc(2rem + 4vw);
+  padding: var(--paddingBox);
+  border-radius:  var(--paddingBox);
   width: 100%;
   overflow: hidden;
 }
@@ -395,7 +398,7 @@ nav{
 
 .loading-response{
   text-align: center;
-  padding: 2rem;
+  padding: var(--paddingBox);
   transition: all 0.8s ease-in;
 }
 
@@ -495,14 +498,22 @@ nav{
 .help{
   display: grid;
   place-content: center;
-  padding: 2rem;
+  padding: var(--paddingBox);
   background-color: #ADC7D6;
-  border-radius: 2rem;
+  border-radius: var(--paddingBox);
   grid-template-columns: auto 1fr;
   gap: 2rem;
   margin-top: 2rem;
   color: #3954A5;
 }
+
+@media screen and (max-width: 1080px) {
+  .help{
+    grid-template-columns: auto;
+  }
+}
+
+  
 #donation-form{
   align-self: center;
   align-items: end;
@@ -511,7 +522,7 @@ nav{
   background-color: #3954A5;
   color: #fff;
   border: none;
-  padding: 1rem 2rem;
+  padding: var(--paddingBox);
   border-radius: 100vh;
   font-size: 1.2rem;
   font-weight: 500;
@@ -629,16 +640,3 @@ nav{
 
 
 
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}

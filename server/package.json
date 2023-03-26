@@ -1,11 +1,11 @@
 {
-  "name": "your-backend",
+  "name": "Mirror",
   "version": "1.0.0",
-  "description": "Backend for your application",
+  "description": "Application for Mirror",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node --experimental-specifier-resolution=node index.mjs"
   },
   "dependencies": {
     "@mailerlite/mailerlite-nodejs": "^1.0.1",

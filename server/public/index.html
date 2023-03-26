@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+  
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <script type="module" crossorigin src="/assets/index-36d14dda.js"></script>
+  <link rel="stylesheet" href="/assets/index-12ccc35f.css">
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <nav>
+        <a href="#">
+          <img class="logo" src="data:image/png;base64,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" alt="Logo">
+        </a>
+        <!-- <a href="#" class="cta-secondary">Take survey</a> -->
+      </nav>
+    </header>
+    <main>
+      <!-- Hero Banner -->
+      <div class="grid">
+        <div class="hero-div flex-flow">
+          <div class="header flex-item">
+            <h1>A moment of Self Reflection</h1>
+            <p class="body">Unlock your potential with AI-powered coaching and self-reflection</p>
+          </div>
+          <form class="flex-item" id="user-details">
+            <div class="startingForm flex-flow ">
+
+              <div class="userName_container">
+                <label for="name">What's your name?</label>
+                <input type="text" id="userName" name="name" placeholder="Enter your name" required>
+              </div>
+              <div class="focusArea_contianer">
+                <label for="area-of-improvement">Select an area of improvement:</label>
+                <select id="focusArea" name="area-of-improvement">
+                  <option value="">Please select</option>
+                  <option value="career">Career development</option>
+                  <option value="time-management">Time management</option>
+                  <option value="finance">Personal finance</option>
+                  <option value="relationships">Relationships</option>
+                  <option value="health">Health and wellness</option>
+                  <option value="goal-setting">Goal-setting</option>
+                  <option value="self-esteem">Self-esteem</option>
+                  <option value="creativity">Creativity</option>
+                  <option value="limiting-beliefs">Overcoming limiting beliefs</option>
+                  <option value="grief">Grief and loss</option>
+                  <option value="mindfulness">Mindfulness</option>
+                  <option value="spirituality">Spirituality</option>
+                  <option value="personal-growth">Personal growth</option>
+                  <option value="leadership">Leadership development</option>
+                  <option value="career-transitions">Career transitions</option>
+                  <option value="habits">Developing better habits</option>
+                </select>  
+              </div>
+              <!-- add another input that allows user to wirte down exactly what they want to go deeper into based on their area of focus -->
+              <div>
+                <label for="area-of-improvement">What specifically?</label>
+                <textarea id="focusAreaDetail" name="area-of-improvement" placeholder="Ex. I don't feel like myself lately" rows="3" style="resize: vertical;"></textarea>
+              </div>
+              
+              <!-- add error div for when user input -->
+              <div class="errorDiv">
+                <div class="errorMessage">  
+                </div>
+              </div>
+              
+              <button class="generate-question">Generate Question</button>
+          </div>
+          </form>
+        </div>
+        <section class="hero-banner">
+
+          <!-- Interaction Section -->
+          <div class="interaction ">
+            <div class="interaction__container">
+              <div class="progress__container">
+                <div data-step="1" class="question-icon-circle"></div>
+                <div class="progress-bar"></div>
+                <div data-step="2" class="question-icon-circle "></div>
+                <div class="progress-bar"></div>
+                <div data-step="3" class="question-icon-circle "></div>
+              </div>            
+
+              <div class="question-counter">
+                <p>Question <span class="current-question">1</span> of <span class="total-questions">3</span></p>
+              </div>
+              
+              <div class="question" data-set>
+                <h3></h3>
+              </div>
+              <form>
+                <label for="textArea">Take your time to answer. Be honest and open, this is a safe space. 🤗</label>
+                <textarea id="textArea" placeholder="Type your answer here"></textarea>
+                <button class="answer">Answer Honestly</button>
+              </form>
+            </div>
+            <!-- Loading Response -->
+            
+            <div class="loading-response hidden">
+                <div class="loader">
+                  <svg class="circular" viewBox="25 25 50 50">
+                    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"/>
+                  </svg>
+                </div>
+              <p>Thinking <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
+            </div>
+            <!-- Result of AI -->
+            <div class="result hidden">
+              <h3 class="insightText"></h3> 
+              <p class="taskTitle">For our next session:</p> 
+              <ul class="sub-header tasksList tasks">
+                
+              </ul>
+              
+              <h3>This was just a simple interaction with Mirror Ai Coach. </h3>
+              <p>you wish to be a Beta tester for the full-experience app where you will be able to follow up on the interaction, track your tasks and much more. Sign up below</p>
+              <button class="Download">Register Now.</button>              
+            </div>
+
+            <div class="DownloadReport hidden">
+              <h3>Hey, thanks for trying out Mirror!</h3>
+              <p>I'm super excited that you're interested in personal growth, and I'm working hard to make Mirror the best sidekick for your journey. As a one-person team, I'd love to keep you in the loop when the full app is ready. So, drop your name and email below, and I'll give you a shout when it's time to level up!</p>
+
+              <form id="Register">
+                <div class="Name hidden">
+                  <label for="name">Enter your name</label>
+                  <input type="name" name="FirstName" id="name" placeholder="Enter your name">  
+                </div>
+
+                <label for="textArea">Enter your email</label>
+                <input id="email" type="email" placeholder="Youremail@mirror.com"></input>
+                <div id="greeting">
+                </div>
+
+                <button class="SubmitInfo">Send Request</button>
+              </form>
+
+              <div class="help">
+                <div class="content">
+
+                  <h3 class="donation-header">By the way, donations are totally optional, but massively appreciated.</h3>
+                  <p class="donation-paragraph">If you found Mirror valuable and want to support my caffeine intake <span> (which helps me continue to build and improve Mirror)</span>, consider making a small contribution. Thank you!</p>
+  
+ 
+                  
+                </div>
+                
+                <form id="donation-form">
+                  <!-- <label for="donation-amount">Donation Amount:</label>
+                  <input type="number" id="donation-amount" name="donation-amount" step="0.01" min="1" placeholder="Enter amount" required>
+                  <button type="submit" id="donate-btn">Donate</button> -->
+                  <a href="https://buy.stripe.com/9AQ4gO4xzd2W1vG000">Donate</a>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+
+    </main>
+    <footer>
+      <p>Copyright © The mirror App</p>
+    </footer>
+  </div>
+  
+</body>
+
+</html>

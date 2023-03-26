@@ -228,10 +228,14 @@ answerBtn.addEventListener("click", async function(e) {
 
 download.addEventListener("click", () => {
   const downloadReport = document.querySelector('.DownloadReport');
-
-  downloadReport.classList.remove('hidden');
   result.style.transform = 'translateY(200%)';
   result.classList.add('hidden');
+  downloadReport.classList.remove('hidden');
+  setTimeout(() => {    
+    // scroll view to the top
+    window.scrollTo(0, 0);
+    downloadReport.style.transform = 'translateY(0)';
+  }, 500);
 });
 
 

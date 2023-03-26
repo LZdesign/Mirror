@@ -39,6 +39,7 @@
 
   --paddingBox: calc(0.5rem + 2vw);
   --paddingFormsInput: 1.2rem 0.9rem;
+  --paddingBtn: 1.2rem 2rem;
 }
 
 
@@ -131,7 +132,7 @@ option{
 }
 button, .btn {
   border-radius: 8rem;
-  padding: 1.2rem 2rem;
+  padding: var(--paddingBtn);
   font-size: 1.2rem;
   font-weight: 500;
   font-family: inherit;
@@ -462,10 +463,12 @@ nav{
   }
 }
 
-.result{
+.result, .DownloadReport{
   transform: translateY(200%);
   transition: all 0.8s ease-out;
 }
+
+
 
 .moveIn{
   transform: translateY(0);
@@ -506,14 +509,6 @@ nav{
   margin-top: 2rem;
   color: #3954A5;
 }
-
-@media screen and (max-width: 1080px) {
-  .help{
-    grid-template-columns: auto;
-  }
-}
-
-  
 #donation-form{
   align-self: center;
   align-items: end;
@@ -522,7 +517,7 @@ nav{
   background-color: #3954A5;
   color: #fff;
   border: none;
-  padding: var(--paddingBox);
+  padding: var(--paddingBtn);
   border-radius: 100vh;
   font-size: 1.2rem;
   font-weight: 500;
@@ -540,6 +535,18 @@ nav{
   font-weight: 700;
   letter-spacing: -0.024em;
 }
+
+@media screen and (max-width: 1080px) {
+  .help{
+    grid-template-columns: auto;
+  }
+  #donation-form{
+    align-self: center;
+    align-items: flex-start;
+  }
+}
+
+  
 /* style the error div and give it a transition plus a transform translate */
 .errorMessage {
   transform: translateY(-100%);

@@ -7,7 +7,7 @@ const answerBtn = document.querySelector(".answer");
 const question = document.querySelector(".question h3");
 const textarea = document.querySelector("#textArea");
 const progress = document.querySelector('.progress__container');
-const baseUrl = "http://localhost:3000/questions";
+const baseUrl = "http://themirrorapp.io/questions";
 const download = document.querySelector('.Download');
 const interactionContainer = document.querySelector(".interaction__container");
 const loadingResponse = document.querySelector(".loading-response");
@@ -305,7 +305,7 @@ document.querySelector('.SubmitInfo').addEventListener('click', async (e) => {
     submitInfoBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
 
     try {
-      const response = await fetch('http://localhost:3000/subscribe', {
+      const response = await fetch('https://themirrorapp.io/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name, groupId }),

@@ -148,6 +148,8 @@ button:focus-visible {
 }
 
 
+
+
 header {
   width: 100%;
   left: 0;
@@ -198,7 +200,7 @@ header {
 }
 
 .sub-header{
-  font-size: clamp(1rem, 1.375rem, 2vw);
+  font-size: clamp(1.4rem, 1.8rem, 2.4vw);
   margin-bottom: calc(2rem + 2vw);
   max-width: 40ch;
   line-height: 140%;
@@ -211,6 +213,7 @@ header {
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
+  background-color: transparent;
   color: #3954A5; 
   border: 1px solid;
 }

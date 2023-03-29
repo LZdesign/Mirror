@@ -1,5 +1,3 @@
-
-
 const generateBtn = document.querySelector("button.generate-question");
 const HeroBanner = document.querySelector(".hero-banner");
 const heroDiv = document.querySelector(".hero-div");
@@ -7,7 +5,7 @@ const answerBtn = document.querySelector(".answer");
 const question = document.querySelector(".question h3");
 const textarea = document.querySelector("#textArea");
 const progress = document.querySelector('.progress__container');
-const baseUrl = "https://www.themirrorapp.io/questions";
+const baseUrl = "http://localhost:3000/questions";
 const download = document.querySelector('.Download');
 const interactionContainer = document.querySelector(".interaction__container");
 const loadingResponse = document.querySelector(".loading-response");
@@ -129,6 +127,22 @@ async function fetchQuestion() {
   return data.message.trim();
 }
 
+// Save conversation to localStorage
+function saveConversation(conversation) {
+  localStorage.setItem("conversation", JSON.stringify(conversation));
+}
+
+// Restore conversation from localStorage
+function restoreConversation() {
+  const storedConversation = localStorage.getItem("conversation");
+  if (storedConversation) {
+    return JSON.parse(storedConversation);
+  }
+  return [];
+}
+
+
+
 generateBtn.addEventListener('click', async (e) => {
   e.preventDefault();
 
@@ -173,6 +187,7 @@ generateBtn.addEventListener('click', async (e) => {
 
   writeQuestion(questionText);
 });
+
 
 answerBtn.addEventListener("click", async function(e) {
   e.preventDefault();
@@ -309,7 +324,7 @@ document.querySelector('.SubmitInfo').addEventListener('click', async (e) => {
     submitInfoBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
 
     try {
-      const response = await fetch('https://www.themirrorapp.io/subscribe', {
+      const response = await fetch('http://localhost:3000/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name, groupId }),

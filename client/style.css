@@ -320,7 +320,10 @@ nav{
   width: max(240px, 100%);
 }
 
-
+.insightText{
+  font-size: clamp(1.6rem,2.4em,2vw);
+  line-height: 140%;
+}
 
 .progress__container {
   display: flex;
@@ -499,6 +502,8 @@ nav{
 .tasks li {
   padding: 0.4rem 0;
   list-style: decimal-leading-zero;
+  font-size: clamp(1.2rem,1.4rem, 1.5vw);
+  line-height: 140%;
 }
 
 .help{

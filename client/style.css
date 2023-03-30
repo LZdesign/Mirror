@@ -40,6 +40,18 @@
   --paddingBox: calc(0.5rem + 2vw);
   --paddingFormsInput: 1.2rem 0.9rem;
   --paddingBtn: 1.2rem 2rem;
+
+
+
+  --color-primary: #dc6967;
+  --color-primary-light: #;
+  --color-primary-dark: #F28482;
+  --color-secondary: #F28482;
+  --color-secondary-light: #F8F0E4;
+  --color-secondary-dark: #F28482;
+  --color-tertiary: #3954A5;
+  --color-tertiary-light: #84A59D;
+  
 }
 
 
@@ -64,7 +76,7 @@ body {
 }
 
 h1 {
-  font-size: clamp(2.8rem, 5rem, 6vw);
+  font-size: clamp(2.8rem, 5rem, 5vw);
   line-height: 1.1;
   letter-spacing: -0.025em;
   font-weight: 700;
@@ -85,11 +97,15 @@ form{
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  align-items: start;
+  align-items: center;
 }
 
 label{
   font-size: 0.9rem;
+  padding-left: 1rem;
+  font-weight: 700;
+  color: #1C1E1C;
+  line-height: 2.8;
 }
 
 textarea{
@@ -200,10 +216,21 @@ header {
 }
 
 .sub-header{
-  font-size: clamp(1.4rem, 1.8rem, 2.4vw);
+  font-size: clamp(1.4rem, 1.5rem, 2.4vw);
   margin-bottom: calc(2rem + 2vw);
   max-width: 40ch;
   line-height: 140%;
+}
+
+.subheader-wrap .sub-header{
+  font-weight: 600;
+}
+
+.sub-header span{
+  font-weight: 400;
+  display: block;
+  margin-top: 1rem;
+  font-size: clamp(1rem, 1.2rem, 2vw);
 }
 
 

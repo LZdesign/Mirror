@@ -158,7 +158,7 @@ function restoreConversation() {
 function loadCheckedForm() {
   const checkedRadioBtn = document.querySelector('.radioBtn:checked');
   if (checkedRadioBtn) {
-    const formFileName = `components/${checkedRadioBtn.value}.html`;
+    const formFileName = `assets/components/${checkedRadioBtn.value}.html`;
     loadForm(formFileName, addGenerateBtnEventListener);
   }
 }

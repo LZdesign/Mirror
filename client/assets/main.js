@@ -54,13 +54,19 @@ async function handleNextQuestion(followUpText) {
     conversation = [...conversation, { role: "assistant", content: insight }];
 
     // split the insight into Insight and Tasks
-    const insightArray = insight.split('%%Tasks:');
+    const insightArray = insight.split('%%');
     const insightText = insightArray[0];
     const tasks = insightArray[1];
+    const resources = insightArray[2];
+
 
     const insightTextEl = document.querySelector('.insightText');
     const tasksEl = document.querySelector('.tasks');
 
+    // Display the resources
+    const resourcesEl = document.querySelector('.resources');
+    resourcesEl.innerHTML = resources;
+    
     // Convert the tasks into an array and display them in the DOM
     const tasksArray = tasks.trim().split(/\d+\./).filter(task => task.trim() !== '');
     const tasksList = document.querySelector('.tasksList');
@@ -279,7 +285,7 @@ answerBtn.addEventListener("click", async function(e) {
   let content;
   
   if (currentQuestion === 3) {
-    content = userInput + " " + "Provide an Insight, and assign three specific tasks for next session. Set task that are manageable, trackable, and attainable. The goal is to keep the user accountable in the following sessions. You will follow up on those tasks in the next session. Can you please format the response as follows: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3>. The '%%' is important, don't avoid it. For example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing.";
+    content = userInput + " " + "Provide an Insight, assign three specific tasks for next session and add resources. Set task that are manageable, trackable, and attainable. The goal is to Prepare the user for the next session by giving assignments and resources like books, podcasts, articles, youtube videos. Anything useful for the client. You will follow up on those in the next session. Can you please format the response as follows: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3> %% Resources: <resources>. The '%%' is important, don't avoid it. For example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing. ";
   } else {
     content = " Provide a follow-up question that will help you to understand the client's perspective on their reflection. " + userInput;
   }

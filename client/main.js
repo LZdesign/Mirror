@@ -158,14 +158,14 @@ function restoreConversation() {
 function loadCheckedForm() {
   const checkedRadioBtn = document.querySelector('.radioBtn:checked');
   if (checkedRadioBtn) {
-    const formFileName = `public/assets/components/${checkedRadioBtn.value}.html`;
+    const formFileName = `/assets/components/${checkedRadioBtn.value}.html`;
     loadForm(formFileName, addGenerateBtnEventListener);
   }
 }
 
 document.querySelectorAll('.radioBtn').forEach(radioBtn => {
   radioBtn.addEventListener('click', () => {
-    const formFileName = `public/assets/components/${radioBtn.value}.html`;
+    const formFileName = `/assets/components/${radioBtn.value}.html`;
     loadForm(formFileName, addGenerateBtnEventListener);
   });
 });
@@ -213,7 +213,7 @@ function addGenerateBtnEventListener() {
           }
         ];
       }
-      else if (btnType === 'self-reflect-2') {
+      else if (btnType === 'vant') {
         const userName = document.querySelector('#userName').value;
         const vant = document.querySelector('#vanting').value;
 

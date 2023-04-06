@@ -53,45 +53,51 @@ async function handleNextQuestion(followUpText) {
     const insight = followUpText;
     conversation = [...conversation, { role: "assistant", content: insight }];
 
-    // split the insight into Insight and Tasks
-    const insightArray = insight.split('%%');
-    const insightText = insightArray[0];
-    const tasks = insightArray[1];
-    const resources = insightArray[2];
+    const insightContainer = document.querySelector('.insightText');
+    const tasksContainer = document.querySelector('.tasksList');
+    const resourcesContainer = document.querySelector('.resourcesList');
+    resourcesContainer.innerHTML = '';
 
+    const insightRegex = /%%Insight: (.+?)\n\n/;
+    const tasksRegex = /%%Tasks:\n([\s\S]+?)\n\n/;
+    const resourcesRegex = /%%Resources:\n([\s\S]+?)$/;
 
-    const insightTextEl = document.querySelector('.insightText');
-    const tasksEl = document.querySelector('.tasks');
+    const insightMatch = insight.match(insightRegex);
+    const tasksMatch = insight.match(tasksRegex);
+    const resourcesMatch = insight.match(resourcesRegex);
 
-    // Convert the resources into an array and display them in the DOM
-    const resourcesArray = resources.trim().split(/\d+\./).filter(resource => resource.trim() !== '');
-    const resourcesList = document.querySelector('.resourcesList');
-    resourcesList.innerHTML = '';
+    const insightText = insightMatch && insightMatch[1];
+    const tasks = tasksMatch && tasksMatch[1];
+    const resources = resourcesMatch && resourcesMatch[1];
 
-    // remove the first element from the array
-    resourcesArray.shift();
-    
-    resourcesArray.forEach(resource => {
-      const li = document.createElement('li');
-      li.textContent = resource.trim();
-      resourcesList.appendChild(li);
-    });
+    if (insightText) {
+      insightContainer.textContent = insightText;
+    }
 
-    // Convert the tasks into an array and display them in the DOM
-    const tasksArray = tasks.trim().split(/\d+\./).filter(task => task.trim() !== '');
-    const tasksList = document.querySelector('.tasksList');
-    tasksList.innerHTML = '';
+    if (tasks) {
+      const tasksList = tasks
+        .trim()
+        .split("\n")
+        .map((task) => `<li>${task.trim()}</li>`)
+        .join("");
+      tasksContainer.innerHTML = tasksList;
+    }
 
-    // remove the first element from the array
-    tasksArray.shift();
-
-    tasksArray.forEach(task => {
-      const li = document.createElement('li');
-      li.textContent = task.trim();
-      tasksList.appendChild(li);
-    });
-
-    insightTextEl.textContent = insightText;
+    if (resources) {
+      const resourceRegex = /(.+?) - \[(.+?)\]/g;
+      const resourcesList = resources
+        .trim()
+        .split("\n")
+        .map((resource) => {
+          const match = resourceRegex.exec(resource);
+          if (match) {
+            return `<li>${match[1]} - <a href="${match[2]}" target="_blank">${match[2]}</a></li>`;
+          }
+          return `<li>${resource.trim()}</li>`;
+        })
+        .join("");
+      resourcesContainer.innerHTML = resourcesList;
+    }
 
     animate();
   }

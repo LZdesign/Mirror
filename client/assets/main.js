@@ -82,6 +82,9 @@ async function handleNextQuestion(followUpText) {
     const tasksList = document.querySelector('.tasksList');
     tasksList.innerHTML = '';
 
+    // remove the first element from the array
+    tasksArray.shift();
+
     tasksArray.forEach(task => {
       const li = document.createElement('li');
       li.textContent = task.trim();

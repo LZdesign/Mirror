@@ -1,20 +1,20 @@
 @font-face {
   font-family: "Satoshi";
-  src: url("assets/Satoshi-Regular.woff2") format("truetype");
+  src: url("Satoshi-Regular.woff2") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Satoshi";
-  src: url("assets/Satoshi-Medium.woff2") format("truetype");
+  src: url("Satoshi-Medium.woff2") format("truetype");
   font-weight: 500;
   font-style: italic;
 }
 
 @font-face {
   font-family: "Satoshi";
-  src: url("assets/Satoshi-Bold.woff2") format("truetype");
+  src: url("Satoshi-Bold.woff2") format("truetype");
   font-weight: 700;
   font-style: normal;
 }
@@ -29,7 +29,7 @@
   color-scheme: light dark;
   color: #1C1E1C;
   background-color: #F8F0E4;
-  background-image: url("assets/Gradient.jpg");
+  background-image: url("Gradient.jpg");
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

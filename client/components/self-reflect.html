@@ -1,0 +1,49 @@
+
+<form data-form="self-reflect" id="user-details">
+    <div class="startingForm flex-flow ">
+      
+      <div class="userName_container">
+        <label for="name">What's your name?</label>
+        <input type="text" id="userName" name="name" placeholder="Enter your name" required>
+      </div>
+      
+      
+      
+      
+      <div class="focusArea_contianer">
+        <label for="area-of-improvement">Select an area of improvement:</label>
+        <select id="focusArea" name="area-of-improvement">
+          <option value="">Please select</option>
+          <option value="career">Career development</option>
+          <option value="time-management">Time management</option>
+          <option value="finance">Personal finance</option>
+          <option value="relationships">Relationships</option>
+          <option value="health">Health and wellness</option>
+          <option value="goal-setting">Goal-setting</option>
+          <option value="self-esteem">Self-esteem</option>
+          <option value="creativity">Creativity</option>
+          <option value="limiting-beliefs">Overcoming limiting beliefs</option>
+          <option value="grief">Grief and loss</option>
+          <option value="mindfulness">Mindfulness</option>
+          <option value="spirituality">Spirituality</option>
+          <option value="personal-growth">Personal growth</option>
+          <option value="leadership">Leadership development</option>
+          <option value="career-transitions">Career transitions</option>
+          <option value="habits">Developing better habits</option>
+        </select>  
+      </div>
+      <!-- add another input that allows user to wirte down exactly what they want to go deeper into based on their area of focus -->
+      <div>
+        <label for="area-of-improvement">What specifically?</label>
+        <textarea id="focusAreaDetail" name="area-of-improvement" placeholder="Ex. I don't feel like myself lately" rows="3" style="resize: vertical;"></textarea>
+      </div>
+      
+      <!-- add error div for when user input -->
+      <div class="errorDiv">
+        <div class="errorMessage">  
+        </div>
+      </div>
+      
+      <button data-btn="self-reflect" class="generate-question">Generate Question</button>
+    </div>
+  </form>

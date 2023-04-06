@@ -181,22 +181,19 @@ function addGenerateBtnEventListener() {
       generateBtn.addEventListener('click', async (e) => {
         e.preventDefault();
 
-        const userNameIsValid = validateAndAnimate('#userName');
-        const focusAreaIsValid = validateAndAnimate('#focusArea');
-        const focusAreaDetailIsValid = validateAndAnimate('#focusAreaDetail');
 
+        
+        // check if the button clicked has a data-btn attribute 
+        
+        const btn = e.target;
+        const btnType = btn.getAttribute('data-btn');
+        
+        if (btnType === 'self-reflect') {
+          
         if (!userNameIsValid || !focusAreaIsValid || !focusAreaDetailIsValid) {
           displayError('Please fill in the empty fields');
           return;
         }
-
-        // check if the button clicked has a data-btn attribute 
-
-        const btn = e.target;
-        const btnType = btn.getAttribute('data-btn');
-
-        if (btnType === 'self-reflect') {
-
 
         const userName = document.querySelector('#userName').value;
         const focusArea = document.querySelector('#focusArea').value;
@@ -216,6 +213,12 @@ function addGenerateBtnEventListener() {
       else if (btnType === 'vant') {
         const userName = document.querySelector('#userName').value;
         const vant = document.querySelector('#vanting').value;
+
+        if (!userNameIsValid || !vantIsValid) {
+          displayError('Please fill in the empty fields');
+          return;
+        }
+
 
         conversation = [
           {

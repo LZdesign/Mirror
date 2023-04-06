@@ -63,10 +63,20 @@ async function handleNextQuestion(followUpText) {
     const insightTextEl = document.querySelector('.insightText');
     const tasksEl = document.querySelector('.tasks');
 
-    // Display the resources
-    const resourcesEl = document.querySelector('.resources');
-    resourcesEl.innerHTML = resources;
+    // Convert the resources into an array and display them in the DOM
+    const resourcesArray = resources.trim().split(/\d+\./).filter(resource => resource.trim() !== '');
+    const resourcesList = document.querySelector('.resourcesList');
+    resourcesList.innerHTML = '';
+
+    // remove the first element from the array
+    resourcesArray.shift();
     
+    resourcesArray.forEach(resource => {
+      const li = document.createElement('li');
+      li.textContent = resource.trim();
+      resourcesList.appendChild(li);
+    });
+
     // Convert the tasks into an array and display them in the DOM
     const tasksArray = tasks.trim().split(/\d+\./).filter(task => task.trim() !== '');
     const tasksList = document.querySelector('.tasksList');
@@ -285,7 +295,7 @@ answerBtn.addEventListener("click", async function(e) {
   let content;
   
   if (currentQuestion === 3) {
-    content = userInput + " " + "Provide an Insight, assign three specific tasks for next session and add resources. Set task that are manageable, trackable, and attainable. The goal is to Prepare the user for the next session by giving assignments and resources like books, podcasts, articles, youtube videos. Anything useful for the client. You will follow up on those in the next session. Can you please format the response as follows: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3> %% Resources: <resources>. The '%%' is important, don't avoid it. For example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing. ";
+    content = userInput + " " + "Provide an Insight, assign three specific tasks for next session and add resources. Set task that are manageable, trackable, and attainable. The goal is to Prepare the user for the next session by giving assignments and resources like books, podcasts, articles, youtube videos. Anything useful for the client. You will follow up on those in the next session. Can you please format the response as follows: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3> %% Resources: <resource 1> <resource 2> <resource 3>. The '%%' is important, don't avoid it. For example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing. reouserce: 1. book 2. podcast 3. article.  ";
   } else {
     content = " Provide a follow-up question that will help you to understand the client's perspective on their reflection. " + userInput;
   }

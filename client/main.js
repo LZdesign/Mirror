@@ -158,14 +158,14 @@ function restoreConversation() {
 function loadCheckedForm() {
   const checkedRadioBtn = document.querySelector('.radioBtn:checked');
   if (checkedRadioBtn) {
-    const formFileName = `assets/components/${checkedRadioBtn.value}.html`;
+    const formFileName = `public/assets/components/${checkedRadioBtn.value}.html`;
     loadForm(formFileName, addGenerateBtnEventListener);
   }
 }
 
 document.querySelectorAll('.radioBtn').forEach(radioBtn => {
   radioBtn.addEventListener('click', () => {
-    const formFileName = `components/${radioBtn.value}.html`;
+    const formFileName = `public/assets/components/${radioBtn.value}.html`;
     loadForm(formFileName, addGenerateBtnEventListener);
   });
 });

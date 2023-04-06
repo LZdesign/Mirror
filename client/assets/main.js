@@ -151,27 +151,19 @@ function validateAndAnimate(selector) {
 }
 
 async function fetchQuestion() {
-  const response = await fetch('https://www.themirrorapp.io/questions', {
+  const response = await fetch(baseUrl, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-type': 'application/json'
     },
-    body: JSON.stringify({ conversation }),
+    body: JSON.stringify({
+      prompt: conversation
+      
+    })
   });
 
-  if (response.status !== 200) {
-    // Handle the error situation
-    console.error(`Error ${response.status}: ${response.statusText}`);
-    return "An error occurred while fetching the question. Please try again later.";
-  }
-
-  if (response.headers.get('Content-Type').includes('application/json')) {
-    const data = await response.json();
-    return data.choices[0].text;
-  } else {
-    console.error("Invalid response format. Expected 'application/json'");
-    return "An error occurred while fetching the question. Please try again later.";
-  }
+  const data = await response.json();
+  return data.message.trim();
 }
 
 // Save conversation to localStorage

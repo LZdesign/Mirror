@@ -298,7 +298,7 @@ answerBtn.addEventListener("click", async function(e) {
   let content;
   
   if (currentQuestion === 3) {
-    content = userInput + " " + "Provide an Insight, assign three specific tasks for next session and add resources. Set task that are manageable, trackable, and attainable. The goal is to Prepare the user for the next session by giving assignments and resources like books, podcasts, articles, youtube videos. Anything useful for the client. You will follow up on those in the next session. Can you please format the response as follows: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3> %% Resources: <resource 1> <resource 2> <resource 3>. The '%%' is important, don't avoid it. For example: Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing. reouserce: 1. book 2. podcast 3. article.  ";
+    content = userInput + " " + "Provide an Insight, assign three specific tasks for the next session and add resources. Set tasks that are manageable, trackable, and attainable. The goal is to Prepare the user for the next session by giving assignments and resources like books, podcasts, articles, and youtube videos. Anything useful for the client. You will follow up on those in the next session. Can you please format the response as follows: %%Insight: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3> %% Resources: <resource 1> <resource 2> <resource 3>. The '%%' is important, don't avoid it. For example Insight: You are a great person / Tasks: 1. Do this 2. Do that 3. Do the other thing. resource: 1. book 2. podcast 3. article. Add links to the resources  ";
   } else {
     content = " Provide a follow-up question that will help you to understand the client's perspective on their reflection. " + userInput;
   }

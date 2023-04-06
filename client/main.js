@@ -1,4 +1,3 @@
-const generateBtn = document.querySelector("button.generate-question");
 const HeroBanner = document.querySelector(".hero-banner");
 const heroDiv = document.querySelector(".hero-div");
 const answerBtn = document.querySelector(".answer");
@@ -10,8 +9,23 @@ const download = document.querySelector('.Download');
 const interactionContainer = document.querySelector(".interaction__container");
 const loadingResponse = document.querySelector(".loading-response");
 const result = document.querySelector(".result");
+const formContainer = document.getElementById("form-container");
 let currentQuestion = question.dataset.set;
 let conversation = [];
+
+
+
+async function loadForm(formFileName, callback) {
+  const response = await fetch(formFileName);
+  const formHtml = await response.text();
+  formContainer.innerHTML = formHtml;
+
+  // Call the callback function after the form has been loaded
+  if (callback) {
+    callback();
+  }
+}
+
 
 async function writeQuestion(questionText) {
   for (let i = 0; i < questionText.length; i++) {
@@ -141,52 +155,102 @@ function restoreConversation() {
   return [];
 }
 
-
-
-generateBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
-
-  const userNameIsValid = validateAndAnimate('#userName');
-  const focusAreaIsValid = validateAndAnimate('#focusArea');
-  const focusAreaDetailIsValid = validateAndAnimate('#focusAreaDetail');
-
-  if (!userNameIsValid || !focusAreaIsValid || !focusAreaDetailIsValid) {
-    displayError('Please fill in the empty fields');
-    return;
+function loadCheckedForm() {
+  const checkedRadioBtn = document.querySelector('.radioBtn:checked');
+  if (checkedRadioBtn) {
+    const formFileName = `components/${checkedRadioBtn.value}.html`;
+    loadForm(formFileName, addGenerateBtnEventListener);
   }
+}
 
-  const userName = document.querySelector('#userName').value;
-  const focusArea = document.querySelector('#focusArea').value;
-  const focusAreaDetail = document.querySelector('#focusAreaDetail').value;
-
-  conversation = [
-    {
-      role: "system",
-      content: "You are an experienced life and mental coach. Start by asking your client the first question, which should encourage self-reflection. Follow the User instructions to complete the interaction. "
-    },
-    {
-      role: "user",
-      content: `Act as an experienced life and mental coach with a proven record of helping people attain greater fulfilment. Your role involves guiding clients in enhancing their relationships, careers, and everyday lives by clarifying their goals, identifying obstacles, and developing strategies to overcome these challenges. Here are some criteria that yoou must follow as a coach:Active Listening: A coach must actively listen to their clients, empathize with them, and understand their unique perspectives and experiences to provide tailored guidance. Clear Communication: A coach must be able to communicate clearly and effectively, both verbally and nonverbally, to help their clients understand the coaching process and the strategies being recommended. Goal-Setting: A coach must work with their clients to set specific, measurable, achievable, relevant, and time-bound (SMART) goals that align with their clients' values and aspirations. Action-Oriented Approach: A coach must help their clients develop actionable plans and strategies to achieve their goals and hold them accountable for taking concrete steps towards progress. Trust and Confidentiality: A coach must maintain a trusting and confidential relationship with their clients to ensure that clients feel safe and comfortable sharing their deepest concerns and challenges. Flexibility and Adaptability: A coach must be able to adapt their coaching approach and strategies to the unique needs and goals of each client, as well as adjust their approach if necessary as the coaching process progresses. Positive Reinforcement: A coach must provide positive reinforcement and encouragement to help their clients stay motivated and continue making progress towards their goals. .You will engage in a session with ${userName}, focusing on the area of ${focusArea}, specifically '${focusAreaDetail}'. Begin by asking the first question, which should encourage self-reflection in ${focusArea} but try not to overwhelm me by asking too deep question straight away. you will address me as ${userName}. Your first response should be: Hello ${userName}, [First Question]. Use a friendly tone and speak in the first person, as if you are talking to a friend.`
-    }
-  ];
-
-  generateBtn.disabled = true;
-  generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
-
-  const questionText = await fetchQuestion();
-  conversation.push({ role: "assistant", content: questionText });
-  currentQuestion = 1;
-  answerBtn.disabled = true;
-
-  heroDiv.classList.add('moveOut');
-  HeroBanner.classList.add('moveIn');
-  setTimeout(() => {
-    progress.querySelector("div[data-step='1']").classList.add('active');
-    heroDiv.classList.add('hidden');
-  }, 500);
-
-  writeQuestion(questionText);
+document.querySelectorAll('.radioBtn').forEach(radioBtn => {
+  radioBtn.addEventListener('click', () => {
+    const formFileName = `components/${radioBtn.value}.html`;
+    loadForm(formFileName, addGenerateBtnEventListener);
+  });
 });
+
+// Load the form for the checked radio button on page load
+loadCheckedForm();
+
+function addGenerateBtnEventListener() {
+  const generateBtn = document.querySelector("button.generate-question");
+
+  if (generateBtn) {
+    
+      generateBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const userNameIsValid = validateAndAnimate('#userName');
+        const focusAreaIsValid = validateAndAnimate('#focusArea');
+        const focusAreaDetailIsValid = validateAndAnimate('#focusAreaDetail');
+
+        if (!userNameIsValid || !focusAreaIsValid || !focusAreaDetailIsValid) {
+          displayError('Please fill in the empty fields');
+          return;
+        }
+
+        // check if the button clicked has a data-btn attribute 
+
+        const btn = e.target;
+        const btnType = btn.getAttribute('data-btn');
+
+        if (btnType === 'self-reflect') {
+
+
+        const userName = document.querySelector('#userName').value;
+        const focusArea = document.querySelector('#focusArea').value;
+        const focusAreaDetail = document.querySelector('#focusAreaDetail').value;
+
+        conversation = [
+          {
+            role: "system",
+            content: "You are an experienced life and mental coach. Start by asking your client the first question, which should encourage self-reflection. Follow the User instructions to complete the interaction. "
+          },
+          {
+            role: "user",
+            content: `Act as an experienced life and mental coach with a proven record of helping people attain greater fulfilment. Your role involves guiding clients in enhancing their relationships, careers, and everyday lives by clarifying their goals, identifying obstacles, and developing strategies to overcome these challenges. Here are some criteria that yoou must follow as a coach:Active Listening: A coach must actively listen to their clients, empathize with them, and understand their unique perspectives and experiences to provide tailored guidance. Clear Communication: A coach must be able to communicate clearly and effectively, both verbally and nonverbally, to help their clients understand the coaching process and the strategies being recommended. Goal-Setting: A coach must work with their clients to set specific, measurable, achievable, relevant, and time-bound (SMART) goals that align with their clients' values and aspirations. Action-Oriented Approach: A coach must help their clients develop actionable plans and strategies to achieve their goals and hold them accountable for taking concrete steps towards progress. Trust and Confidentiality: A coach must maintain a trusting and confidential relationship with their clients to ensure that clients feel safe and comfortable sharing their deepest concerns and challenges. Flexibility and Adaptability: A coach must be able to adapt their coaching approach and strategies to the unique needs and goals of each client, as well as adjust their approach if necessary as the coaching process progresses. Positive Reinforcement: A coach must provide positive reinforcement and encouragement to help their clients stay motivated and continue making progress towards their goals. .You will engage in a session with ${userName}, focusing on the area of ${focusArea}, specifically '${focusAreaDetail}'. Begin by asking the first question, which should encourage self-reflection in ${focusArea} but try not to overwhelm me by asking too deep question straight away. you will address me as ${userName}. Your first response should be: Hello ${userName}, [First Question]. Use a friendly tone and speak in the first person, as if you are talking to a friend.`
+          }
+        ];
+      }
+      else if (btnType === 'self-reflect-2') {
+        const userName = document.querySelector('#userName').value;
+        const vant = document.querySelector('#vanting').value;
+
+        conversation = [
+          {
+            role: "system",
+            content: "You are an experienced life and mental coach. Start by asking your client the first question, which should encourage self-reflection. Follow the User instructions to complete the interaction. "
+          },
+          {
+            role: "user",
+            content: `Act as an experienced life and mental coach with a proven record of helping people attain greater fulfilment. Your role involves guiding clients in enhancing their relationships, careers, and everyday lives by clarifying their goals, identifying obstacles, and developing strategies to overcome these challenges. Here are some criteria that yoou must follow as a coach:Active Listening: A coach must actively listen to their clients, empathize with them, and understand their unique perspectives and experiences to provide tailored guidance. Clear Communication: A coach must be able to communicate clearly and effectively, both verbally and nonverbally, to help their clients understand the coaching process and the strategies being recommended. Goal-Setting: A coach must work with clients to set specific, measurable, achievable, relevant, and time-bound (SMART) goals that align with their client's values and aspirations. Action-Oriented Approach: A coach must help clients develop actionable plans and strategies to achieve their goals and hold them accountable for taking concrete steps towards progress. Trust and Confidentiality: A coach must maintain a trusting and confidential relationship with their clients to ensure they feel safe and comfortable sharing their deepest concerns and challenges. Flexibility and Adaptability: A coach must be able to adapt their coaching approach and strategies to the unique needs and goals of each client, as well as adjust their approach if necessary as the coaching process progresses. Positive Reinforcement: A coach must provide positive reinforcement and encouragement to help their clients stay motivated and continue making progress towards their goals. You will engage in a session with ${userName}, he is currently experiencing some emotions, saying the following '${vant}'. Begin by understanding and empathising, but try not to overwhelm me by asking too deep questions straight away. you will address me as ${userName}. Your first response should be: Hello ${userName}[response]. Use a friendly tone and speak in the first person, as if you are talking to a friend.`
+         
+          }
+        ];
+      }
+
+
+
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+
+        const questionText = await fetchQuestion();
+        conversation.push({ role: "assistant", content: questionText });
+        currentQuestion = 1;
+        answerBtn.disabled = true;
+
+        heroDiv.classList.add('moveOut');
+        HeroBanner.classList.add('moveIn');
+        setTimeout(() => {
+          progress.querySelector("div[data-step='1']").classList.add('active');
+          heroDiv.classList.add('hidden');
+        }, 500);
+
+        writeQuestion(questionText);
+      });
+  }
+}
 
 
 answerBtn.addEventListener("click", async function(e) {
@@ -346,3 +410,5 @@ document.querySelector('.SubmitInfo').addEventListener('click', async (e) => {
 
   
 });
+
+

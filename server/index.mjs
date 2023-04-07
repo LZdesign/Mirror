@@ -25,12 +25,21 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const getCompletion = async (prompt) => {
+  try {
     return await openai.createChatCompletion({
-        model: "gpt-4",
-        messages: prompt,
-        max_tokens: 500
+      model: "gpt-4",
+      messages: prompt,
+      max_tokens: 500,
     });
+  } catch (error) {
+    console.error('Error in getCompletion:', error);
+    if (error.response) {
+      console.log('Error response data:', error.response.data);
+    }
+    throw error;
+  }
 };
+
 
 const promiseTimeout = (ms, promise) => {
   return new Promise((resolve, reject) => {
@@ -98,7 +107,7 @@ app.post('/questions', async (req, res) => {
     try {
         const prompt = req.body.prompt;
         console.log("Before API call:", new Date().toISOString());
-        const completion = await promiseTimeout(10000, getCompletion(prompt));
+        const completion = await promiseTimeout(50000, getCompletion(prompt));
         console.log("After API call:", new Date().toISOString());
         res.status(200).send({ message: completion.data.choices[0].message.content });
     } catch (error) {

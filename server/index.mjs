@@ -107,12 +107,21 @@ app.post('/questions', async (req, res) => {
     try {
         const prompt = req.body.prompt;
         console.log("Before API call:", new Date().toISOString());
-        const completion = await promiseTimeout(50000, getCompletion(prompt));
+        const completion = await promiseTimeout(60000, getCompletion(prompt));
         console.log("After API call:", new Date().toISOString());
         res.status(200).send({ message: completion.data.choices[0].message.content });
     } catch (error) {
         res.status(500).send({ error });
     }
+});
+
+// Add this middleware after all other routes and middleware
+app.use((error, req, res, next) => {
+  console.error('Unhandled error:', error);
+  if (error.response) {
+    console.log('Error response data:', error.response.data);
+  }
+  res.status(500).send({ error: 'An unexpected error occurred.' });
 });
 
 

@@ -75,28 +75,34 @@ async function handleNextQuestion(followUpText) {
     }
 
     if (tasks) {
-      const tasksList = tasks
-        .trim()
-        .split("\n")
-        .map((task) => `<li>${task.trim()}</li>`)
-        .join("");
-      tasksContainer.innerHTML = tasksList;
+      tasksContainer.innerHTML = '';
+      tasks.trim().split("\n").forEach(task => {
+        const li = document.createElement('li');
+        li.textContent = task.trim();
+        tasksContainer.appendChild(li);
+      });
     }
 
     if (resources) {
+      resourcesContainer.innerHTML = '';
       const resourceRegex = /(.+?) - \[(.+?)\]/g;
-      const resourcesList = resources
-        .trim()
-        .split("\n")
-        .map((resource) => {
-          const match = resourceRegex.exec(resource);
-          if (match) {
-            return `<li>${match[1]} - <a href="${match[2]}" target="_blank">${match[2]}</a></li>`;
-          }
-          return `<li>${resource.trim()}</li>`;
-        })
-        .join("");
-      resourcesContainer.innerHTML = resourcesList;
+      resources.trim().split("\n").forEach(resource => {
+        const match = resourceRegex.exec(resource);
+        if (match) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = match[2];
+          a.target = '_blank';
+          a.textContent = match[2];
+          li.textContent = `${match[1]} - `;
+          li.appendChild(a);
+          resourcesContainer.appendChild(li);
+        } else {
+          const li = document.createElement('li');
+          li.textContent = resource.trim();
+          resourcesContainer.appendChild(li);
+        }
+      });
     }
 
     animate();

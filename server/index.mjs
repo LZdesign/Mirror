@@ -2,7 +2,6 @@ import 'dotenv/config';
 import { Configuration, OpenAIApi } from "openai";
 import express from 'express';
 import cors from 'cors';
-import Stripe from 'stripe';
 import MailerLite from '@mailerlite/mailerlite-nodejs';
 
 const mailerLite = new MailerLite({
@@ -16,8 +15,8 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 const app = express();
 app.use(cors({
-  origin: 'https://www.themirrorapp.io/', // Replace with your front-end domain
-  methods: ['GET', 'POST'], // You can add more methods if needed
+  origin: 'https://www.themirrorapp.io/',
+  methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -40,7 +39,6 @@ const getCompletion = async (prompt) => {
   }
 };
 
-
 const promiseTimeout = (ms, promise) => {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -59,18 +57,6 @@ const promiseTimeout = (ms, promise) => {
   });
 };
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-app.post('/create-payment-intent', async (req, res) => {
-  const { amount } = req.body;
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount,
-    currency: 'eur',
-  });
-
-  res.json({ client_secret: paymentIntent.client_secret });
-});
-
 const addSubscriber = async (email, name, groupId) => {
   const params = {
     email,
@@ -84,10 +70,12 @@ const addSubscriber = async (email, name, groupId) => {
   try {
     const response = await mailerLite.subscribers.createOrUpdate(params);
     console.log(response.data);
+    return response.data;
   } catch (error) {
     if (error.response) {
       console.log(error.response.data);
     }
+    throw error;
   }
 };
 
@@ -99,7 +87,7 @@ app.post('/subscribe', async (req, res) => {
     res.status(200).send({ message: 'Subscriber added successfully', subscriber });
   } catch (error) {
     console.error('Error adding subscriber:', error);
-    res.status(500).send({ error });
+    res.status(500).send({ error: 'Failed to add subscriber' });
   }
 });
 
@@ -111,11 +99,11 @@ app.post('/questions', async (req, res) => {
         console.log("After API call:", new Date().toISOString());
         res.status(200).send({ message: completion.data.choices[0].message.content });
     } catch (error) {
-        res.status(500).send({ error });
+        console.error('Error in questions route:', error);
+        res.status(500).send({ error: 'Failed to get completion' });
     }
 });
 
-// Add this middleware after all other routes and middleware
 app.use((error, req, res, next) => {
   console.error('Unhandled error:', error);
   if (error.response) {
@@ -124,10 +112,8 @@ app.use((error, req, res, next) => {
   res.status(500).send({ error: 'An unexpected error occurred.' });
 });
 
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-

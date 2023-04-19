@@ -58,13 +58,17 @@ async function handleNextQuestion(followUpText) {
     const resourcesContainer = document.querySelector('.resourcesList');
     resourcesContainer.innerHTML = '';
 
-    const insightsIndex = insight.indexOf("%%Insight:");
-    const tasksIndex = insight.indexOf("%%Tasks:");
-    const resourcesIndex = insight.indexOf("%%Resources:");
+    const insightRegex = /%%Insight: (.+?)\n\n/;
+    const tasksRegex = /%%Tasks:\n([\s\S]+?)\n\n/;
+    const resourcesRegex = /%%Resources:\n([\s\S]+?)$/;
 
-    const insightText = insight.slice(insightsIndex + 10, tasksIndex).trim();
-    const tasks = insight.slice(tasksIndex + 9, resourcesIndex).trim();
-    const resources = insight.slice(resourcesIndex + 12).trim();
+    const insightMatch = insight.match(insightRegex);
+    const tasksMatch = insight.match(tasksRegex);
+    const resourcesMatch = insight.match(resourcesRegex);
+
+    const insightText = insightMatch && insightMatch[1];
+    const tasks = tasksMatch && tasksMatch[1];
+    const resources = resourcesMatch && resourcesMatch[1];
 
     if (insightText) {
       insightContainer.textContent = insightText;
@@ -81,15 +85,16 @@ async function handleNextQuestion(followUpText) {
 
     if (resources) {
       resourcesContainer.innerHTML = '';
+      const resourceRegex = /(.+?) - \[(.+?)\]/g;
       resources.trim().split("\n").forEach(resource => {
-        const resourceRegex = /(.+?) - \[(.+?)\]/;
         const match = resourceRegex.exec(resource);
         if (match) {
           const li = document.createElement('li');
           const a = document.createElement('a');
           a.href = match[2];
           a.target = '_blank';
-          a.textContent = match[1].trim(); // Changed this line to show the resource name instead of the link
+          a.textContent = match[2];
+          li.textContent = `${match[1]} - `;
           li.appendChild(a);
           resourcesContainer.appendChild(li);
         } else {
@@ -103,7 +108,6 @@ async function handleNextQuestion(followUpText) {
     animate();
   }
 }
-
 
 
 async function animate() {

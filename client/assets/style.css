@@ -346,6 +346,7 @@ input#userName{
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  flex: 1;
 }
 .choice__item{
   flex: 1;
@@ -582,8 +583,8 @@ input[type="radio"]:checked + .choice__item{
 }
 
 .tasks li {
+  list-style: none;
   padding: 0.4rem 0;
-  list-style: decimal-leading-zero;
   font-size: clamp(1.2rem,1.4rem, 1.5vw);
   line-height: 140%;
 }

@@ -26,7 +26,7 @@ app.use(express.static('public'));
 const getCompletion = async (prompt) => {
   try {
     return await openai.createChatCompletion({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: prompt,
       max_tokens: 500,
     });

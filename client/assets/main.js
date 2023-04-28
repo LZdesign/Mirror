@@ -59,22 +59,27 @@ async function handleNextQuestion(followUpText) {
     resourcesContainer.innerHTML = '';
 
     const insightRegex = /%%Insight: (.+?)\n\n/;
-    const tasksRegex = /%%Tasks:\n([\s\S]+?)\n\n/;
+    const tasksRegex = /%%Tasks: (.+?)\n\n/;
     const resourcesRegex = /%%Resources:\n([\s\S]+?)$/;
 
     const insightMatch = insight.match(insightRegex);
     const tasksMatch = insight.match(tasksRegex);
     const resourcesMatch = insight.match(resourcesRegex);
-
+    
+    console.log('Insight:', insightText);
+    console.log('Tasks Match:', tasksMatch);
+    console.log('Resources Match:', resourcesMatch);
+    
     const insightText = insightMatch && insightMatch[1];
     const tasks = tasksMatch && tasksMatch[1];
     const resources = resourcesMatch && resourcesMatch[1];
-
+    
     if (insightText) {
       insightContainer.textContent = insightText;
     }
-
+    
     if (tasks) {
+      console.log('Tasks:', tasks);
       tasksContainer.innerHTML = '';
       tasks.trim().split("\n").forEach(task => {
         const li = document.createElement('li');
@@ -82,8 +87,9 @@ async function handleNextQuestion(followUpText) {
         tasksContainer.appendChild(li);
       });
     }
-
+    
     if (resources) {
+      console.log('Resources:', resources);
       resourcesContainer.innerHTML = '';
       const resourceRegex = /(.+?) - \[(.+?)\]/g;
       resources.trim().split("\n").forEach(resource => {
@@ -104,6 +110,7 @@ async function handleNextQuestion(followUpText) {
         }
       });
     }
+    
 
     animate();
   }
@@ -310,7 +317,7 @@ answerBtn.addEventListener("click", async function(e) {
   let content;
   
   if (currentQuestion === 3) {
-    content = userInput + "." + " Share an insight, assign three tasks for the next session, and suggest resources. Ensure tasks are manageable, trackable, and attainable. Format: %%Insight: <Insight> %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3> %%Resources: <resource 1> <resource 2> <resource 3>.  The '%%' is important, don't avoid it.";
+    content = userInput + "." + " Share an insight, assign three tasks for the next session, and suggest resources. Ensure tasks are manageable, trackable, and attainable. Format: %%Insight: <Insight>  %%Tasks: 1.<Task 1> 2.<Task 2> 3.<Task 3>  %%Resources: <resource 1> <resource 2> <resource 3>  Conclusion.  The '%%' separates the response into sections, so don't avoid it and only add it to the beginning.";
   } else {
     content = " Provide a follow-up question that will help you to understand the client's perspective on their reflection. " + userInput;
   }

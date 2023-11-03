@@ -1,0 +1,27 @@
+
+<form data-form="rant" id="user-details">
+    <div class="startingForm flex-flow ">
+      
+      <div class="userName_container">
+        <label for="name">What's your name?</label>
+        <input type="text" id="userName" name="name" placeholder="Enter your name" required>
+      </div>
+      
+      <!-- add another input that allows user to wirte down exactly what they want to go deeper into based on their area of focus -->
+      <div>
+        <label for="area-of-improvement">
+          What's on your mind?
+        </label>
+        <textarea id="vanting" name="area-of-improvement" placeholder="Ex. Why nobody ever understands me" rows="3" style="resize: vertical;"></textarea>
+      </div>
+      
+      <!-- add error div for when user input -->
+      <div class="errorDiv">
+        <div class="errorMessage">  
+        </div>
+      </div>
+      
+      <button data-btn="vant" class="generate-question">Submit</button>
+
+    </div>
+  </form>

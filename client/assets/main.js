@@ -196,7 +196,6 @@ function addGenerateBtnEventListener() {
 
         const questionText = await fetchQuestion();
         conversation.push({ role: "assistant", content: questionText });
-        currentQuestion = 1;
         answerBtn.disabled = true;
 
         heroDiv.classList.add('moveOut');

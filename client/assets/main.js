@@ -1,7 +1,8 @@
 const HeroBanner = document.querySelector(".hero-banner");
 const heroDiv = document.querySelector(".hero-div");
 const answerBtn = document.querySelector(".answer");
-const question = document.querySelector(".question h3");
+const question = document.querySelector(".question p");
+const conversationContainer = document.querySelector(".conversation-container");
 const textarea = document.querySelector("#textArea");
 const progress = document.querySelector('.progress__container');
 const baseUrl = "https://www.themirrorapp.io/questions";
@@ -21,17 +22,21 @@ async function loadForm(formFileName, callback) {
   }
 }
 
+function addMessageToConversation(sender, text) {
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message', sender);
+  messageElement.textContent = text;
+  conversationContainer.appendChild(messageElement);
+  conversationContainer.scrollTop = conversationContainer.scrollHeight; // Scroll to the bottom
+}
+
 async function writeQuestion(questionText) {
-  for (let i = 0; i < questionText.length; i++) {
-    await new Promise(resolve => setTimeout(resolve, 40));
-    question.textContent += questionText.charAt(i);
-  }
+  addMessageToConversation('assistant', questionText);
   answerBtn.disabled = false;
 }
 
 async function handleNextQuestion(followUpText) {
-  question.textContent = "";
-  writeQuestion(followUpText);
+  addMessageToConversation('assistant', followUpText);
 }
 
 async function animate() {
@@ -183,7 +188,7 @@ function addGenerateBtnEventListener() {
           },
           {
             role: "user",
-            content: `Begin a session with '${userName}', '${userName}' answered to why are you seeking out coaching: '${focusAreaDetail}'`
+            content: `Begin a session with '${userName}', '${userName}' answered to why are you seeking out coaching: '${vant}'`
 
           }
         ];
@@ -219,6 +224,7 @@ answerBtn.addEventListener("click", async function(e) {
     return;
   }
 
+  addMessageToConversation('user', userInput); // Add user input to the conversation
   answerBtn.disabled = true;
   answerBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
   conversation.push({ role: "user", content: userInput });

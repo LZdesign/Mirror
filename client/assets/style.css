@@ -332,6 +332,31 @@ nav{
 
 /* End Layout */
 
+.conversation-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Enables scrolling */
+  /* Add other styles such as padding, background, etc. */
+}
+
+.message {
+  margin: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  /* Common message styles */
+}
+
+.message.user {
+  align-self: flex-end;
+  background-color: var(--color-secondary-dark); /* Choose a color that represents the user */
+}
+
+.message.assistant {
+  align-self: flex-start;
+  background-color: var(--color-primary-dark); /* Choose a color that represents the assistant */
+}
+
+
 input#userName{
   width: 100%;
 }

@@ -1,7 +1,6 @@
 const HeroBanner = document.querySelector(".hero-banner");
 const heroDiv = document.querySelector(".hero-div");
 const answerBtn = document.querySelector(".answer");
-const question = document.querySelector(".question p");
 const conversationContainer = document.querySelector(".conversation-container");
 const textarea = document.querySelector("#textArea");
 const progress = document.querySelector('.progress__container');

@@ -116,7 +116,6 @@ textarea{
   padding: var(--paddingFormsInput);
   border-radius: 1.2rem;
   color: #1C1E1C;
-  min-height: 10rem;
 }
 
 textarea:focus, textarea:focus-visible, textarea:active,
@@ -278,10 +277,10 @@ nav{
 
 .hero-banner{
   margin: auto 0;
-  grid-column: 1 / 4;
+  grid-column: 1 / -1;
   grid-row: 1;
   position: relative;
-  height: 100%;
+  height: calc(100% - 40px);
   display: flex;
   align-items: center;
   transform: translateY(100%);
@@ -302,32 +301,7 @@ nav{
   transition: all 0.8s ease-in;
 }
 
-@media (max-width: 620px) {
-  .grid{
-    grid-template-columns: 1fr 1fr ;
-    transform: translateY(-0%);
-  }
-  .hero-div{
-    grid-column: -1;
-    max-width: 100%;
-    grid-row: 2;
-    padding: 0;
-    margin: 0;
-    z-index: 10;
-  }
-  .illustration{
-    grid-column: -1;
-    grid-row: 1;
-  }
-  .illustration img{
-    width: 320px;
-    display: block;
-    margin: 0 auto;
-  }
-  .hero-banner{
-    grid-row: 2;
-  }
-}
+
 
 
 /* End Layout */
@@ -336,24 +310,31 @@ nav{
   display: flex;
   flex-direction: column;
   overflow-y: auto; /* Enables scrolling */
-  /* Add other styles such as padding, background, etc. */
+  height: calc(100% - 100px);
+  padding-bottom: 2rem;
+
 }
 
 .message {
-  margin: 10px;
-  padding: 5px;
-  border-radius: 5px;
-  /* Common message styles */
+  margin: 0 0 10px 0;
+  padding: 9px;
+  border-radius: 7.5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  max-width: 50ch;
+}
+.message p {
+  margin: 0;
 }
 
 .message.user {
   align-self: flex-end;
-  background-color: var(--color-secondary-dark); /* Choose a color that represents the user */
+  background-color: var(--color-tertiary-light);
 }
 
 .message.assistant {
   align-self: flex-start;
-  background-color: var(--color-primary-dark); /* Choose a color that represents the assistant */
+  background-color: var( --color-secondary-dark);
 }
 
 
@@ -416,12 +397,26 @@ input[type="radio"]:checked + .choice__item{
   border-radius:  var(--paddingBox);
   width: 100%;
   overflow: hidden;
+  height: 100%;
+  max-height: 90vh; 
 }
 
 .interaction__container{
   height: 100%;
   transition: transform 0.8s ease, height 0.2s ease;
 
+}
+
+.interaction__container form {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  height: 20%;
+}
+
+.textAreaContainer{
+  flex: 1;
 }
 
 .interaction > div {
@@ -679,6 +674,20 @@ input[type="radio"]:checked + .choice__item{
   transition: all 0.5s ease-in-out;
 }
 
+.end-session-btn {
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #f44336; /* red for end session, adjust as needed */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.end-session-btn:hover {
+  background-color: #d32f2f; /* darker red on hover */
+}
+
+
 @keyframes shake {
   10%, 90% {
     transform: translate3d(-1px, 0, 0);
@@ -763,3 +772,40 @@ input[type="radio"]:checked + .choice__item{
 
 
 
+@media (max-width: 620px) {
+  .grid{
+    grid-template-columns: 1fr 1fr ;
+    transform: translateY(-0%);
+  }
+  .hero-div{
+    grid-column: -1;
+    max-width: 100%;
+    grid-row: 2;
+    padding: 0;
+    margin: 0;
+    z-index: 10;
+  }
+  .illustration{
+    grid-column: -1;
+    grid-row: 1;
+  }
+  .illustration img{
+    width: 320px;
+    display: block;
+    margin: 0 auto;
+  }
+  .hero-banner{
+    grid-row: 2;
+  }
+  .conversation-container{
+    max-height: 70%;
+    height: auto;
+  }
+  .interaction{
+    height: 100%;
+    max-height: 100dvh;
+  }
+  .interaction__container form{
+    flex-direction: column;
+  }
+}

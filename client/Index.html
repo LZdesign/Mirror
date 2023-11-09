@@ -77,44 +77,21 @@
           <!-- Interaction Section -->
           <div class="interaction ">
             <div class="interaction__container">
-              <div class="progress__container">
-                <div data-step="1" class="question-icon-circle"></div>
-                <div class="progress-bar"></div>
-                <div data-step="2" class="question-icon-circle "></div>
-                <div class="progress-bar"></div>
-                <div data-step="3" class="question-icon-circle "></div>
-              </div>            
+         
               
               <div class="conversation-container">
               </div>
               <form>
-                <label for="textArea">Take your time to answer. Be honest and open, this is a safe space. 🤗</label>
-                <textarea id="textArea" placeholder="Type your answer here"></textarea>
+                <div class="textAreaContainer">
+                  <label for="textArea">Take your time to answer. Be honest and open, this is a safe space. 🤗</label>
+                  <textarea id="textArea" placeholder="Type your answer here"></textarea>
+                </div>
+
                 <button class="answer">Answer Honestly</button>
               </form>
             </div>
-            <!-- Loading Response -->
-            
-            <div class="loading-response hidden">
-                <div class="loader">
-                  <svg class="circular" viewBox="25 25 50 50">
-                    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10"/>
-                  </svg>
-                </div>
-              <p>Thinking <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
-            </div>
-            <!-- Result of AI -->
+
             <div class="result hidden">
-              <h3 class="insightText"></h3> 
-              <p>For our next session:</p> 
-              <div class="taskWrap">
-                <p class="taskTitle">Here are your tasks:</p>
-                <ul class="sub-header tasksList tasks"></ul>
-              </div>
-              <div class="resourcesWrap">
-                <p class="taskTitle">Check out those resources</p>
-                <ul class="tasks resourcesList"></ul>
-              </div>
               
               <div class="RegisterWrap">
                 <h3>This was just a simple interaction with Mirror Ai Coach. </h3>

@@ -23,6 +23,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('public'));
 
+
+z
 const getCompletion = async (prompt) => {
   try {
     return await openai.createChatCompletion({
@@ -94,9 +96,7 @@ app.post('/subscribe', async (req, res) => {
 app.post('/questions', async (req, res) => {
     try {
         const prompt = req.body.prompt;
-        console.log("Before API call:", new Date().toISOString());
         const completion = await promiseTimeout(60000, getCompletion(prompt));
-        console.log("After API call:", new Date().toISOString());
         res.status(200).send({ message: completion.data.choices[0].message.content });
     } catch (error) {
         console.error('Error in questions route:', error);

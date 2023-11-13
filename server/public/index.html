@@ -16,8 +16,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-5XMP9TD');</script>
   <!-- End Google Tag Manager -->
-  <script type="module" crossorigin src="/assets/index-00efee5f.js"></script>
-  <link rel="stylesheet" href="/assets/index-08c9f316.css">
+  <script type="module" crossorigin src="/assets/index-56468401.js"></script>
+  <link rel="stylesheet" href="/assets/index-3ebe99ac.css">
 </head>
 
 <body>
@@ -45,33 +45,34 @@
       <div class="grid">
         <div class="hero-div flex-flow">
           <div class="header flex-item">
-              <h1>Your self-reflection companion and life coach</h1>
-              <div class="subheader-wrap"> 
-                <p class="sub-header">
-                  Get a free coaching session and gain insight into your thoughts, emotions, and behaviors.
-                </p>
-              </div>
-              <div class="choice">
-                <label for="choice">What do you want to do?</label>
-                <div class="choice__container">
-                  <div class="radio_wrap">
-                    <input type="radio" class="radioBtn" id="choice1" name="choice" value="self-reflect" checked>
-                    <label class="choice__item" for="choice1">
-                      <span>Self-reflect</span>
-                      <span class="tooltip">A great way to get to know yourself better.</span>
-                    </label>
-                  </div>
-                  <div class="radio_wrap">
-                    <input type="radio" class="radioBtn" id="choice2" name="choice" value="rant">
-                    <label class="choice__item" for="choice2">
-                    <span>Vent</span>
-                    <span class="tooltip">Get your feelings out and feel better.</span>
-                  </label>
-                </div>
-              </div>
+            <h1>Explore the Power of AI Coaching Today</h1>
+            <div class="subheader-wrap"> 
+              <h2 class="sub-header">Dive into a transformative dialogue with Mirror’s AI coach. <br> No sign-ups, no commitments – just instant, meaningful conversation.</h2>
             </div>
           </div>
-          <div id="form-container" class="flex-item form"></div>
+          <div id="form-container" class="flex-item form">
+            <form data-form="self-reflect" id="user-details">
+              <div class="startingForm flex-flow ">
+                
+                <div class="userName_container">
+                  <label for="name">What's your name?</label>
+                  <input type="text" id="userName" name="name" placeholder="Enter your name" required>
+                </div>
+                
+                <div>
+                  <label for="area-of-improvement">What would you like to discuss</label>
+                  <p style="margin: 0;"><span id="focusAreaDetail" name="area-of-improvement" class="textarea" role="textbox" contenteditable></span></p>
+                </div>
+                
+                <div class="errorDiv">
+                  <div class="errorMessage">  
+                  </div>
+                </div>
+                
+                <button data-btn="self-reflect" class="generate-question">Start Session</button>
+              </div>
+            </form>
+          </div>
 
         </div>
         <section class="hero-banner">
@@ -85,62 +86,64 @@
               </div>
               <form>
                 <div class="textAreaContainer">
-                  <label for="textArea">Take your time to answer. Be honest and open, this is a safe space. 🤗</label>
-                  <textarea id="textArea" placeholder="Type your answer here"></textarea>
+                  <div>
+                    <label for="textArea">Take your time to answer. A more thoughtful reply will help your coach understand better. </label>
+                    <p style="margin: 0;"><span id="textArea" class="textarea" role="textbox" contenteditable></span></p>
+                  </div>
                 </div>
 
                 <button class="answer">Answer Honestly</button>
               </form>
             </div>
 
-            <div class="result hidden">
-              
-              <div class="RegisterWrap">
-                <h3>This was just a simple interaction with Mirror Ai Coach. </h3>
-                <p>you wish to be a Beta tester for the full-experience app where you will be able to follow up on the interaction, track your tasks and much more. Sign up below</p>
-                <button class="Download">Register Now.</button>              
-              </div>
-              
-            </div>
-
-            <div class="DownloadReport hidden">
-              <h3>Hey, thanks for trying out Mirror!</h3>
-              <p>I'm super excited that you're interested in personal growth, and I'm working hard to make Mirror the best sidekick for your journey. As a one-person team, I'd love to keep you in the loop when the full app is ready. So, drop your name and email below, and I'll give you a shout when it's time to level up!</p>
-
-              <form id="Register">
-                <div class="Name hidden">
-                  <label for="name">Enter your name</label>
-                  <input type="name" name="FirstName" id="name" placeholder="Enter your name">  
-                </div>
-
-                <label for="textArea">Enter your email</label>
-                <input id="email" type="email" placeholder="Youremail@mirror.com"></input>
-                <div id="greeting">
-                </div>
-
-                <button class="SubmitInfo">Send Request</button>
-              </form>
-
-              <div class="help">
-                <div class="content">
-
-                  <h3 class="donation-header">By the way, donations are totally optional, but massively appreciated.</h3>
-                  <p class="donation-paragraph">If you found Mirror valuable and want to support my caffeine intake <span> (which helps me continue to build and improve Mirror)</span>, consider making a small contribution. Thank you!</p>
-  
- 
-                  
-                </div>
-                
-                <form id="donation-form">
-                  <!-- <label for="donation-amount">Donation Amount:</label>
-                  <input type="number" id="donation-amount" name="donation-amount" step="0.01" min="1" placeholder="Enter amount" required>
-                  <button type="submit" id="donate-btn">Donate</button> -->
-                  <a href="https://buy.stripe.com/9AQ4gO4xzd2W1vG000">Donate</a>
-                </form>
-              </div>
-            </div>
 
           </div>
+
+          <div class="result hidden">
+              
+            <div class="RegisterWrap">
+              <h3>This was just a simple interaction with Mirror Ai Coach. </h3>
+              <p>you wish to be a Beta tester for the full-experience app where you will be able to follow up on the interaction, track your tasks and much more. Sign up below</p>
+              <button class="Download">Register Now.</button>              
+            </div>
+            
+          </div>
+
+          <div class="DownloadReport hidden">
+            <h3>Hey, thanks for trying out Mirror!</h3>
+            <p>I'm super excited that you're interested in personal growth, and I'm working hard to make Mirror the best sidekick for your journey. As a one-person team, I'd love to keep you in the loop when the full app is ready. So, drop your name and email below, and I'll give you a shout when it's time to level up!</p>
+
+            <form id="Register">
+              <div class="Name hidden">
+                <label for="name">Enter your name</label>
+                <input type="name" name="FirstName" id="name" placeholder="Enter your name">  
+              </div>
+
+              <div class="Email">
+                <label for="textArea">Enter your email</label>
+                <input id="email" type="email" placeholder="Youremail@mirror.com"></input>
+              </div>
+
+              <div id="greeting">
+              </div>
+
+              <button class="SubmitInfo">Send Request</button>
+            </form>
+
+            <div class="help">
+              <div class="content">
+
+                <h3 class="donation-header">By the way, donations are totally optional, but massively appreciated.</h3>
+                <p class="donation-paragraph">If you found Mirror valuable and want to support my caffeine intake <span> (which helps me continue to build and improve Mirror)</span>, consider making a small contribution. Thank you!</p>
+                  
+              </div>
+              
+              <form id="donation-form">
+                <a href="https://buy.stripe.com/9AQ4gO4xzd2W1vG000">Donate</a>
+              </form>
+            </div>
+          </div>
+
         </section>
 
       </div>

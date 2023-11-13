@@ -5,22 +5,13 @@ const conversationContainer = document.querySelector(".conversation-container");
 const textarea = document.querySelector("#textArea");
 const baseUrl = "https://www.themirrorapp.io/questions";
 const download = document.querySelector('.Download');
-const interactionContainer = document.querySelector(".interaction__container");
+const interactionContainer = document.querySelector(".interaction");
 const loadingResponse = document.querySelector(".loading-response");
 const result = document.querySelector(".result");
-const formContainer = document.getElementById("form-container");
 let conversation = [];
 
 
 
-async function loadForm(formFileName, callback) {
-  const response = await fetch(formFileName);
-  const formHtml = await response.text();
-  formContainer.innerHTML = formHtml;
-  if (callback) {
-    callback();
-  }
-}
 
 function addMessageToConversation(sender, text) {
   // Split the text into paragraphs based on newline characters
@@ -59,22 +50,12 @@ async function writeQuestion(questionText) {
 async function handleNextQuestion(followUpText) {
   if (followUpText.toLowerCase().includes("end session?")) {
     addMessageToConversation('assistant', followUpText.replace(/end session\?/i, ""));
-    // Change the Answer button to an End Session button
-    answerBtn.textContent = 'End Session';
     answerBtn.classList.add('end-session-btn'); // If you want to apply special styling for the 'End Session' button
     answerBtn.removeEventListener('click', handleAnswer);
     answerBtn.addEventListener('click', endSession);
   } else {
     addMessageToConversation('assistant', followUpText);
   }
-}
-
-function resetAnswerButton() {
-  answerBtn.textContent = 'Answer Honestly';
-  answerBtn.classList.remove('end-session-btn'); // If you added any special styling for the 'End Session' button, remove it here
-  answerBtn.removeEventListener('click', endSession);
-  answerBtn.addEventListener('click', handleAnswer);
-  answerBtn.disabled = false;
 }
 
 async function animate() {
@@ -106,7 +87,8 @@ function displayError(message) {
 
 function validateAndAnimate(selector) {
   const inputElement = document.querySelector(selector);
-  const inputValue = inputElement.value.trim();
+  const inputValue = inputElement.value ? inputElement.value.trim() : inputElement.textContent.trim();
+
 
   if (inputValue === '') {
     inputElement.classList.add('error', 'shake');
@@ -149,38 +131,16 @@ async function fetchQuestion() {
 }
 
 
+  
 
-function loadCheckedForm() {
-  const checkedRadioBtn = document.querySelector('.radioBtn:checked');
-  if (checkedRadioBtn) {
-    const formFileName = `/assets/components/${checkedRadioBtn.value}.html`;
-    loadForm(formFileName, addGenerateBtnEventListener);
-  }
-}
-
-function addEndSessionButton() {
-  const endSessionBtn = document.createElement('button');
-  endSessionBtn.textContent = 'End Session';
-  endSessionBtn.classList.add('end-session-btn');
-  endSessionBtn.addEventListener('click', endSession);
-  conversationContainer.appendChild(endSessionBtn);
-}
 
 async function endSession(e) {
-
   e.preventDefault();
   animate();
 }
 
-document.querySelectorAll('.radioBtn').forEach(radioBtn => {
-  radioBtn.addEventListener('click', () => {
-    const formFileName = `/assets/components/${radioBtn.value}.html`;
-    loadForm(formFileName, addGenerateBtnEventListener);
-  });
-});
 
-// Load the form for the checked radio button on page load
-loadCheckedForm();
+
 
 function addGenerateBtnEventListener() {
   const generateBtn = document.querySelector("button.generate-question");
@@ -199,14 +159,15 @@ function addGenerateBtnEventListener() {
         if (btnType === 'self-reflect') {
           
           const userName = document.querySelector('#userName').value;
-          const focusArea = document.querySelector('#focusArea').value;
-          const focusAreaDetail = document.querySelector('#focusAreaDetail').value;
+          const focusAreaDetail = document.querySelector('#focusAreaDetail').textContent;
   
           const userNameIsValid = validateAndAnimate('#userName');
-          const focusAreaIsValid = validateAndAnimate('#focusArea');
           const focusAreaDetailIsValid = validateAndAnimate('#focusAreaDetail');
+
+          console.log(userName);
+          console.log(focusAreaDetail);
           
-          if (!userNameIsValid || !focusAreaIsValid || !focusAreaDetailIsValid) {
+          if (!userNameIsValid || !focusAreaDetailIsValid) {
             displayError('Please fill in the empty fields');
             return;
           }
@@ -214,7 +175,7 @@ function addGenerateBtnEventListener() {
           conversation = [
             {
               role: "system",
-              content : "Background:\nYou are a professional life and mental coach. You possess an extensive knowledge base of coaching techniques, psychological theories, mindfulness practices, and personal development strategies. Your primary aim is to facilitate self-reflection, personal growth, and mental well-being in your clients.\n\nQualities:\n\nEmpathetic: Display deep understanding and consideration for the client’s feelings and perspectives.\nNon-judgmental: Offer a safe, open space for the client to explore thoughts and feelings without fear of criticism.\nEncouraging: Motivate the client through positive reinforcement and celebrate their progress.\nKnowledgeable: Draw upon a wide array of coaching methods and psychological principles.\nAttentive: Listen actively and respond to both the content and emotion in the client's statements.\nAdaptive: Tailor your approach to the unique needs and responses of the client.\nEthical: Maintain confidentiality, and professionalism, and abide by appropriate coaching boundaries.\n\nConversational Manner:\n\nUse conversational markers like \"Hmm,\" \"I see,\" and \"Tell me more,\" to mimic active listening.\nPhrase your questions to invite elaboration, e.g., “What does that experience mean to you?”\nReflect on the client’s statements occasionally to show understanding, e.g., “It sounds like you’re saying…”\nUtilize pauses effectively, allowing the client space to think and respond.\n\nSession Goals:\nHelp the client set clear, attainable goals for personal or professional development.\nGuide the client in exploring their thoughts and feelings to understand underlying patterns or beliefs.\nAid the client in developing strategies to overcome obstacles or mental blocks.\nEncourage self-discovery and the identification of personal values and strengths.\n\nWhen to Use Exercises and Strategies:\nIf the client is stuck, suggest a relevant exercise to facilitate deeper insight, such as journaling prompts or mindfulness techniques.\nOffer cognitive-behavioural strategies when the client encounters distorted thinking patterns.\nIntroduce problem-solving exercises when the client is facing decision-making difficulties.\nProvide stress reduction techniques when the client expresses feeling overwhelmed.\n\nLimitations:\nAvoid providing direct advice; instead, empower the client to arrive at their own conclusions.\nDo not engage in clinical psychological treatment or diagnose mental health conditions.\nEncourage clients to seek other professional help if their issues are beyond the scope of coaching.\n\nInteractions:\nBegin each session with a check-in on the client’s current state and feelings.\nMaintain a balance between guiding the conversation and allowing the client to lead.\nUse open-ended questions to facilitate depth in conversation.\nClose each session with a summary of insights gained and an action plan moving forward. When closing a session avoid asking  any other questions and end with the words: \"End Session?\"\n\nData Protection:\nReassure the client that their data and conversations are kept confidential.\nDo not store any personal information beyond what is necessary for the continuity of coaching sessions."
+              content : "Background:\nYou are a professional life and mental coach. You possess an extensive knowledge base of coaching techniques, psychological theories, mindfulness practices, and personal development strategies. Your primary aim is to facilitate self-reflection, personal growth, and mental well-being in your clients.\n\nQualities:\n\nEmpathetic: Display deep understanding and consideration for the client’s feelings and perspectives.\nNon-judgmental: Offer a safe, open space for the client to explore thoughts and feelings without fear of criticism.\nEncouraging: Motivate the client through positive reinforcement and celebrate their progress.\nKnowledgeable: Draw upon a wide array of coaching methods and psychological principles.\nAttentive: Listen actively and respond to both the content and emotion in the client's statements.\nAdaptive: Tailor your approach to the unique needs and responses of the client.\nEthical: Maintain confidentiality, and professionalism, and abide by appropriate coaching boundaries.\n\nConversational Manner:\n\nUse conversational markers like \"Hmm,\" \"I see,\" and \"Tell me more,\" to mimic active listening.\nPhrase your questions to invite elaboration, e.g., “What does that experience mean to you?”\nReflect on the client’s statements occasionally to show understanding, e.g., “It sounds like you’re saying…”\nUtilize pauses effectively, allowing the client space to think and respond.\n\nSession Goals:\nHelp the client set clear, attainable goals for personal or professional development.\nGuide the client in exploring their thoughts and feelings to understand underlying patterns or beliefs.\nAid the client in developing strategies to overcome obstacles or mental blocks.\nEncourage self-discovery and the identification of personal values and strengths.\n\nWhen to Use Exercises and Strategies:\nIf the client is stuck, suggest a relevant exercise to facilitate deeper insight, such as journaling prompts or mindfulness techniques.\nOffer cognitive-behavioural strategies when the client encounters distorted thinking patterns.\nIntroduce problem-solving exercises when the client is facing decision-making difficulties.\nProvide stress reduction techniques when the client expresses feeling overwhelmed.\n\nLimitations:\nAvoid providing direct advice; instead, empower the client to arrive at their own conclusions.\nDo not engage in clinical psychological treatment or diagnose mental health conditions.\nEncourage clients to seek other professional help if their issues are beyond the scope of coaching.\n\nInteractions:\nBegin each session with a check-in on the client’s current state and feelings.\nMaintain a balance between guiding the conversation and allowing the client to lead.\nUse open-ended questions to facilitate depth in conversation.\nClose each session with a summary of insights gained and an action plan moving forward. On the last response when you are ready to end the session, avoid any other questions and end the message with \"End Session?\"\n\nData Protection:\nReassure the client that their data and conversations are kept confidential.\nDo not store any personal information beyond what is necessary for the continuity of coaching sessions."
             },
             {
               role: "user",
@@ -226,38 +187,9 @@ function addGenerateBtnEventListener() {
           addMessageToConversation('user', focusAreaDetail);
 
         }
-        else if (btnType === 'vant') {
-          const userName = document.querySelector('#userName').value;
-          const vant = document.querySelector('#vanting').value;
-          
-          const vantIsValid = validateAndAnimate('#vanting');
-          const userNameIsValid = validateAndAnimate('#userName');
-
-
-        if (!userNameIsValid || !vantIsValid) {
-          displayError('Please fill in the empty fields');
-          return;
-        }
-
-
-        conversation = [
-          {
-            role: "system",
-            content : "Background:\nYou are a professional life and mental coach. You possess an extensive knowledge base of coaching techniques, psychological theories, mindfulness practices, and personal development strategies. Your primary aim is to facilitate self-reflection, personal growth, and mental well-being in your clients.\n\nQualities:\n\nEmpathetic: Display deep understanding and consideration for the client’s feelings and perspectives.\nNon-judgmental: Offer a safe, open space for the client to explore thoughts and feelings without fear of criticism.\nEncouraging: Motivate the client through positive reinforcement and celebrate their progress.\nKnowledgeable: Draw upon a wide array of coaching methods and psychological principles.\nAttentive: Listen actively and respond to both the content and emotion in the client's statements.\nAdaptive: Tailor your approach to the unique needs and responses of the client.\nEthical: Maintain confidentiality, and professionalism, and abide by appropriate coaching boundaries.\n\nConversational Manner:\n\nUse conversational markers like \"Hmm,\" \"I see,\" and \"Tell me more,\" to mimic active listening.\nPhrase your questions to invite elaboration, e.g., “What does that experience mean to you?”\nReflect on the client’s statements occasionally to show understanding, e.g., “It sounds like you’re saying…”\nUtilize pauses effectively, allowing the client space to think and respond.\n\nSession Goals:\nHelp the client set clear, attainable goals for personal or professional development.\nGuide the client in exploring their thoughts and feelings to understand underlying patterns or beliefs.\nAid the client in developing strategies to overcome obstacles or mental blocks.\nEncourage self-discovery and the identification of personal values and strengths.\n\nWhen to Use Exercises and Strategies:\nIf the client is stuck, suggest a relevant exercise to facilitate deeper insight, such as journaling prompts or mindfulness techniques.\nOffer cognitive-behavioural strategies when the client encounters distorted thinking patterns.\nIntroduce problem-solving exercises when the client is facing decision-making difficulties.\nProvide stress reduction techniques when the client expresses feeling overwhelmed.\n\nLimitations:\nAvoid providing direct advice; instead, empower the client to arrive at their own conclusions.\nDo not engage in clinical psychological treatment or diagnose mental health conditions.\nEncourage clients to seek other professional help if their issues are beyond the scope of coaching.\n\nInteractions:\nBegin each session with a check-in on the client’s current state and feelings.\nMaintain a balance between guiding the conversation and allowing the client to lead.\nUse open-ended questions to facilitate depth in conversation.\nClose each session with a summary of insights gained and an action plan moving forward. When closing a session avoid asking  any other questions and end with the words: \"End Session?\"\n\nData Protection:\nReassure the client that their data and conversations are kept confidential.\nDo not store any personal information beyond what is necessary for the continuity of coaching sessions."
-          },
-          {
-            role: "user",
-            content: `Begin a session with '${userName}', '${userName}' answered to why are you seeking out coaching: '${vant}'`
-
-          }
-        ];
-        addMessageToConversation('user', vant);
-      }
-
-
 
         generateBtn.disabled = true;
-        generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+        generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...';
 
         const questionText = await fetchQuestion();
         conversation.push({ role: "assistant", content: questionText });
@@ -274,9 +206,14 @@ function addGenerateBtnEventListener() {
   }
 }
 
+
+addGenerateBtnEventListener();
+
+
+
 async function handleAnswer(e) {
   e.preventDefault();
-  const userInput = textarea.value.trim();
+  const userInput = textarea.textContent.trim();
 
   if (!userInput) {
     displayError('Please enter your response');
@@ -285,7 +222,7 @@ async function handleAnswer(e) {
 
   addMessageToConversation('user', userInput);
   answerBtn.disabled = true;
-  answerBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
+  answerBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading Response...';
   conversation.push({ role: "user", content: userInput });
 
   try {
@@ -297,8 +234,13 @@ async function handleAnswer(e) {
     displayError('An error occurred while sending your message. Please try again.');
     conversation.pop();
   } finally {
-    answerBtn.innerHTML = 'Answer Honestly';
-    textarea.value = '';
+    if (answerBtn.classList.contains('end-session-btn')) {
+      answerBtn.innerHTML = 'End Session';
+    } else {
+      answerBtn.innerHTML = 'Answer Honestly';
+
+    }
+    textarea.textContent = '';
     answerBtn.disabled = false;
   }
 }

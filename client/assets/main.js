@@ -3,33 +3,36 @@ const heroDiv = document.querySelector(".hero-div");
 const answerBtn = document.querySelector(".answer");
 const conversationContainer = document.querySelector(".conversation-container");
 const textarea = document.querySelector("#textArea");
-const baseUrl = "https://www.themirrorapp.io/questions";
+const serverport = 3001;
+const baseUrl = `http://localhost:${serverport}`;
 const download = document.querySelector('.Download');
 const interactionContainer = document.querySelector(".interaction");
 const loadingResponse = document.querySelector(".loading-response");
 const result = document.querySelector(".result");
+let selectedTopic = "";
 let conversation = [];
 
 
+function markdownToHTML(text) {
+  return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
 
 
 function addMessageToConversation(sender, text) {
-  // Split the text into paragraphs based on newline characters
   const paragraphs = text.split('\n\n');
   
   paragraphs.forEach(paragraph => {
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', sender);
 
-    // Split the paragraph into lines based on single newline characters
     const lines = paragraph.split('\n');
     lines.forEach((line, index) => {
-      if (line) { // Only create a p element if the line is not empty
+      if (line) {
         const lineElement = document.createElement('p');
-        lineElement.textContent = line;
+        lineElement.innerHTML = markdownToHTML(line); // Use innerHTML instead of textContent
         messageElement.appendChild(lineElement);
       }
-      if (index < lines.length - 1) { // Add a break if it's not the last line
+      if (index < lines.length - 1) {
         messageElement.appendChild(document.createElement('br'));
       }
     });
@@ -37,16 +40,20 @@ function addMessageToConversation(sender, text) {
     conversationContainer.appendChild(messageElement);
   });
 
-  // Scroll to the bottom of the conversation container
+
+// Scroll to the bottom of the conversation container
   conversationContainer.scrollTop = conversationContainer.scrollHeight;
 }
 
+//  function to write the question to the conversation 
 
 async function writeQuestion(questionText) {
   addMessageToConversation('assistant', questionText);
   answerBtn.disabled = false;
 }
 
+
+// function to handle the next question
 async function handleNextQuestion(followUpText) {
   if (followUpText.toLowerCase().includes("end session?")) {
     addMessageToConversation('assistant', followUpText.replace(/end session\?/i, ""));
@@ -57,6 +64,8 @@ async function handleNextQuestion(followUpText) {
     addMessageToConversation('assistant', followUpText);
   }
 }
+
+
 
 async function animate() {
   interactionContainer.style.transform = "translateY(-200%)";
@@ -100,23 +109,21 @@ function validateAndAnimate(selector) {
   return true;
 }
 
-async function fetchQuestion() {
+async function fetchthreadId() {
   let retries = 3;
   let response;
+  let nextUrl = baseUrl+"/threadId";
+
   while (retries > 0) {
     try {
-      response = await fetch(baseUrl, {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify({ prompt: conversation })
-      });
+      response = await fetch(nextUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
-        const data = await response.json();
-        return data.message.trim();
+        const {threadId} = await response.json();
+        console.warn(threadId);
+
+        return threadId; 
       }
     } catch (error) {
       console.log(error);
@@ -131,7 +138,55 @@ async function fetchQuestion() {
 }
 
 
-  
+async function fetchQuestion(threadId="") {
+  let retries = 3;
+  let response;
+  let lastMessage = conversation[conversation.length - 1];
+  let nextUrl = `${baseUrl}/questions/${threadId}`;
+
+  while (retries > 0) {
+    try {
+      response = await fetch(nextUrl, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: lastMessage })
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        const prompt = await response.json();
+        console.warn('prompt', prompt);
+        
+        const { message } = prompt;
+
+        console.log(prompt);
+
+        return message.value.trim(); 
+      }
+    } catch (error) {
+      console.log(error);
+      retries--;
+      if (retries === 0) {
+        throw new Error('Service is currently unavailable. Please try again later.');
+      }
+      console.log(`Retrying... (${retries} retries left)`);
+      await new Promise(resolve => setTimeout(resolve, 2000)); // wait for 2 seconds before retrying
+    }
+  }
+}
+
+
+document.querySelectorAll('.topic-pills .pill').forEach(pill => {
+  pill.addEventListener('click', (e) => {
+    e.preventDefault();
+    selectedTopic = e.target.textContent.trim();
+    document.querySelectorAll('.topic-pills .pill').forEach(p => p.classList.remove('selected'));
+    e.target.classList.add('selected');
+  });
+});
+
 
 
 async function endSession(e) {
@@ -159,24 +214,16 @@ function addGenerateBtnEventListener() {
         if (btnType === 'self-reflect') {
           
           const userName = document.querySelector('#userName').value;
-          const focusAreaDetail = document.querySelector('#focusAreaDetail').textContent;
+          const focusAreaDetail = selectedTopic;
   
           const userNameIsValid = validateAndAnimate('#userName');
-          const focusAreaDetailIsValid = validateAndAnimate('#focusAreaDetail');
-
-          console.log(userName);
-          console.log(focusAreaDetail);
           
-          if (!userNameIsValid || !focusAreaDetailIsValid) {
+          if (!userNameIsValid ) {
             displayError('Please fill in the empty fields');
             return;
           }
           
           conversation = [
-            {
-              role: "system",
-              content : "Background:\nYou are a professional life and mental coach. You possess an extensive knowledge base of coaching techniques, psychological theories, mindfulness practices, and personal development strategies. Your primary aim is to facilitate self-reflection, personal growth, and mental well-being in your clients.\n\nQualities:\n\nEmpathetic: Display deep understanding and consideration for the client’s feelings and perspectives.\nNon-judgmental: Offer a safe, open space for the client to explore thoughts and feelings without fear of criticism.\nEncouraging: Motivate the client through positive reinforcement and celebrate their progress.\nKnowledgeable: Draw upon a wide array of coaching methods and psychological principles.\nAttentive: Listen actively and respond to both the content and emotion in the client's statements.\nAdaptive: Tailor your approach to the unique needs and responses of the client.\nEthical: Maintain confidentiality, and professionalism, and abide by appropriate coaching boundaries.\n\nConversational Manner:\n\nUse conversational markers like \"Hmm,\" \"I see,\" and \"Tell me more,\" to mimic active listening.\nPhrase your questions to invite elaboration, e.g., “What does that experience mean to you?”\nReflect on the client’s statements occasionally to show understanding, e.g., “It sounds like you’re saying…”\nUtilize pauses effectively, allowing the client space to think and respond.\n\nSession Goals:\nHelp the client set clear, attainable goals for personal or professional development.\nGuide the client in exploring their thoughts and feelings to understand underlying patterns or beliefs.\nAid the client in developing strategies to overcome obstacles or mental blocks.\nEncourage self-discovery and the identification of personal values and strengths.\n\nWhen to Use Exercises and Strategies:\nIf the client is stuck, suggest a relevant exercise to facilitate deeper insight, such as journaling prompts or mindfulness techniques.\nOffer cognitive-behavioural strategies when the client encounters distorted thinking patterns.\nIntroduce problem-solving exercises when the client is facing decision-making difficulties.\nProvide stress reduction techniques when the client expresses feeling overwhelmed.\n\nLimitations:\nAvoid providing direct advice; instead, empower the client to arrive at their own conclusions.\nDo not engage in clinical psychological treatment or diagnose mental health conditions.\nEncourage clients to seek other professional help if their issues are beyond the scope of coaching.\n\nInteractions:\nBegin each session with a check-in on the client’s current state and feelings.\nMaintain a balance between guiding the conversation and allowing the client to lead.\nUse open-ended questions to facilitate depth in conversation.\nClose each session with a summary of insights gained and an action plan moving forward. On the last response when you are ready to end the session, avoid any other questions and end the message with \"End Session?\"\n\nData Protection:\nReassure the client that their data and conversations are kept confidential.\nDo not store any personal information beyond what is necessary for the continuity of coaching sessions."
-            },
             {
               role: "user",
               content: `Begin a session with '${userName}', '${userName}' answered to why are you seeking out coaching: '${focusAreaDetail}'`
@@ -184,19 +231,26 @@ function addGenerateBtnEventListener() {
             }
           ];
 
-          addMessageToConversation('user', focusAreaDetail);
+          // addMessageToConversation('user', focusAreaDetail);
 
         }
 
         generateBtn.disabled = true;
+        generateBtn.classList.add('waiting');
         generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...';
 
-        const questionText = await fetchQuestion();
+        const threadId = await fetchthreadId(); 
+        window.threadId = threadId || "";
+
+        const questionText = await fetchQuestion(threadId);
         conversation.push({ role: "assistant", content: questionText });
         answerBtn.disabled = true;
 
         heroDiv.classList.add('moveOut');
+        HeroBanner.classList.remove('hidden');
+        setTimeout(() => {
         HeroBanner.classList.add('moveIn');
+        }, 100);
         setTimeout(() => {
           heroDiv.classList.add('hidden');
         }, 500);
@@ -220,13 +274,19 @@ async function handleAnswer(e) {
     return;
   }
 
+  if (!window.threadId) {
+    displayError('threadId is not defined');
+    return;
+  }
+
   addMessageToConversation('user', userInput);
   answerBtn.disabled = true;
   answerBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading Response...';
+  answerBtn.classList.add('waiting');
   conversation.push({ role: "user", content: userInput });
 
   try {
-    const followUpText = await fetchQuestion();
+    const followUpText = await fetchQuestion(window.threadId);
     conversation.push({ role: "assistant", content: followUpText });
     handleNextQuestion(followUpText);
   } catch (error) {
@@ -237,6 +297,7 @@ async function handleAnswer(e) {
     if (answerBtn.classList.contains('end-session-btn')) {
       answerBtn.innerHTML = 'End Session';
     } else {
+      answerBtn.classList.remove('waiting');
       answerBtn.innerHTML = 'Answer Honestly';
 
     }

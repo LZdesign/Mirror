@@ -26,15 +26,15 @@
   --paddingBtn: 1.2rem 2rem;
 
 
+  --color-background: #F8F0E4;
   --color-text: #1C1E1C;
   --color-primary: #dc6967;
   --color-primary-light:  #F28482;
-  --color-primary-dark: #84A59D;
-  --color-secondary: #F28482;
-  --color-background: #F8F0E4;
-  --color-secondary-dark: #ADC7D6;
-  --color-tertiary: #3954A5;
-  --color-tertiary-light: #cce1ed;
+  --color-secondary: #84A59D;
+  --color-secondary-dark: #3E594E;
+  --color-secondary-light: #C3D9D3;
+  --color-accent-light: #cce1ed;
+  --color-accent: #3954A5;
   
   
   font-family: Satoshi, Inter, Helvetica, Arial, sans-serif;
@@ -135,10 +135,10 @@ input:focus, input:focus-visible, input:active
   max-height: 120px;    
 }
 
-.textarea[contenteditable]:empty::before {
-  content: "Be honest and open, this is a safe space. 🤗";
-  color: hsl(120, 3%, 40%) ;
-
+.textareaPill[contenteditable]:empty::before {
+  margin: 0;
+  padding: 0;
+  content: "✏️ Add your topic";
 }
 
 input{
@@ -170,26 +170,27 @@ button, .btn {
   border: none;
   font-family: inherit;
   color: #fff;
-  background: var(--color-tertiary);
   letter-spacing: -0.024em;  cursor: pointer;
   transition: all 0.5s ease-in-out;
   position: relative;
   overflow: hidden;
   background-size: 500% 100%;
-  background-image: linear-gradient(to right, var(--color-tertiary), var(--color-tertiary-light), var(--color-tertiary-light));
+  background-image: linear-gradient(to right, var(--color-accent), var(--color-accent-light), var(--color-accent-light));
 }
 
 button:hover, .btn:hover {
   background-position: 100% 0;
-  color: var(--color-tertiary);
+  color: var(--color-accent);
 }
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
 }
 
-
+.waiting{
+  background-image: linear-gradient(to right, var(--color-secondary-dark), var(--color-secondary), var(--color-secondary-light));
+}
 
 
 header {
@@ -300,6 +301,11 @@ nav{
   align-items: center;
   transform: translateY(110%);
   transition: all 0.8s ease-out;
+  height: calc(100vh - 80px);
+  position: fixed;
+  top: 80px;
+  width: 100%;
+  left: 0;
 }
 
 .illustration{
@@ -315,6 +321,7 @@ nav{
   position: relative;
   top: 0;
   transition: all 0.8s ease-in;
+  gap: 4rem;
 }
 
 
@@ -350,7 +357,7 @@ nav{
 
 .message.assistant {
   align-self: flex-start;
-  background-color: var(--color-tertiary-light);
+  background-color: var(--color-accent-light);
 }
 
 
@@ -431,12 +438,12 @@ form#Register {
   display: grid;
   place-content: center;
   padding: var(--paddingBox);
-  background-color: var(--color-tertiary-light);
+  background-color: var(--color-accent-light);
   border-radius: var(--paddingBox);
   grid-template-columns: auto 1fr;
   gap: 2rem;
   margin-top: 2rem;
-  color: var(--color-tertiary);
+  color: var(--color-accent);
 }
 
 #donation-form{
@@ -537,13 +544,44 @@ form#Register {
 }
 
 
+.topic-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
 
+.pill {
+  font-size: 1rem;
+  border: none;
+  border-radius: 100px;
+  padding: var(--paddingBtn);
+  cursor: pointer;
+  color: var(--color-secondary-dark);
+  background-size: 500% 100%;
+  background-image: linear-gradient(to right, var(--color-secondary-light), var(--color-secondary), var(--color-secondary-dark));
+}
 
+.pill.editable{
+  background-image: linear-gradient(to right, var(--color-background), var(--color-background), var(--color-secondary-dark));
+  color: var(--color-secondary-dark);
+}
+
+.pill:hover {
+  background-position: 100% 0;
+  color: var(--color-secondary-light);
+}
+
+.pill.selected, .pill.editable.selected{
+  background-position: 100% 0;
+  color: var(--color-background);
+}
 
 @media (max-width: 620px) {
   .grid{
     grid-template-columns: 1fr 1fr ;
     transform: translateY(-0%);
+    overflow: visible;
+    grid-template-rows: auto;
   }
   .hero-div{
     grid-column: 1 / -1;
@@ -552,7 +590,11 @@ form#Register {
     padding: 0;
     margin: 0;
     z-index: 10;
-    gap: 4rem;
+    gap: 0;
+  }
+  .hero-banner{
+    top: 0;
+    height: calc(100vh - 110px);
   }
   .interaction__container{
     grid-template-rows: 1fr auto;

@@ -4,7 +4,7 @@ const answerBtn = document.querySelector(".answer");
 const conversationContainer = document.querySelector(".conversation-container");
 const textarea = document.querySelector("#textArea");
 const serverport = 3001;
-const baseUrl = `https://themirrorapp.io:${serverport}`;
+const baseUrl = `https://www.themirrorapp.io`;
 const download = document.querySelector('.Download');
 const interactionContainer = document.querySelector(".interaction");
 const loadingResponse = document.querySelector(".loading-response");
@@ -121,7 +121,6 @@ async function fetchthreadId() {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
         const {threadId} = await response.json();
-        console.warn(threadId);
 
         return threadId; 
       }
@@ -156,12 +155,8 @@ async function fetchQuestion(threadId="") {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
-        const prompt = await response.json();
-        console.warn('prompt', prompt);
-        
+        const prompt = await response.json();        
         const { message } = prompt;
-
-        console.log(prompt);
 
         return message.value.trim(); 
       }
@@ -338,7 +333,6 @@ document.getElementById('donation-form').addEventListener('submit', async (e) =>
   });
 
   const responseBody = await response.text();
-  console.log('Response from server:', responseBody);
   const { client_secret } = JSON.parse(responseBody);
 
   // Confirm the PaymentIntent using Stripe.js

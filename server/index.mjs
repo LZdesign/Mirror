@@ -18,7 +18,7 @@ const openai = new OpenAI({
 
 const app = express();
 app.use(cors({ 
-  origin: ['https://www.themirrorapp.io/'+clientPort],
+  origin: ['https://www.themirrorapp.io', `http://localhost:${clientPort}`],
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));

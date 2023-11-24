@@ -3,7 +3,6 @@ import { OpenAI } from "openai";
 import express from 'express';
 import cors from 'cors';
 import MailerLite from '@mailerlite/mailerlite-nodejs';
-import { get } from 'mongoose';
 const serverport = 3001;
 const clientPort = 3000;
 
@@ -16,9 +15,10 @@ const mailerLite = new MailerLite({
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
+
 const app = express();
-app.use(cors({
-  origin: ["http://localhost:"+clientPort, 'https://www.themirrorapp.io/'],
+app.use(cors({ 
+  origin: ['https://www.themirrorapp.io/'+clientPort],
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));

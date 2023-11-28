@@ -7,6 +7,7 @@ const serverport = 3001;
 const clientPort = 3000;
 
 
+
 const mailerLite = new MailerLite({
   api_key: process.env.MAILERLITE_API_KEY
 });
@@ -18,7 +19,7 @@ const openai = new OpenAI({
 
 const app = express();
 app.use(cors({ 
-  origin: ['https://www.themirrorapp.io', `http://localhost:${clientPort}`],
+  origin: [ process.env.DOMAIN_SERVER , `http://localhost:${clientPort}`],
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -39,9 +40,12 @@ const getThread = async () => {
 }
 
 
+
+
 const StartSession = async (prompt, threadId) => {
   const userMessage = prompt;
   let tId = threadId;
+
   
   // Create a thread if not already created
   if (!tId) {
@@ -54,41 +58,88 @@ const StartSession = async (prompt, threadId) => {
   // Create a run in the thread
   const run = await openai.beta.threads.runs.create(threadId, { 
     assistant_id: "asst_xlelcBeodEC4PPGqYReZaHCc",
-    instructions: "End the session by providing the action plan and the tasks to be done in a list format."
+    instructions: "Use bold markup to highlight the questions you want to ask the user. If you ask a question that has options form which the user can pick from, add it at the end inside [ ]  like this [ option1, option2, option3 ] Only insert the actual options. If one of the options is to pick somethine else always user 'Something Else'. Keep the conversation simple and ask 1 question at a time."
   });
-
-  // Get the run id
+  
   runId = run.id;
 
+  // Get Run Id 
+  console.log('Run ID:', runId);
 
+  
+
+  
   // Wait for the run to complete and then get messages
   await waitForRunCompletion(tId, runId);
   let messages = await getMessages(tId);
-
+  
   return messages
 }
 
+// const Get_Options = async (question, options) => {
+//     console.log( "GET_Options Called");
+//     const IntQuestion = question;
+//     const option = options[2];
+
+    
+
+// }
 
 
 // Function to wait for run completion
 const waitForRunCompletion = async (threadId, runId) => {
+  console.log('Waiting for run to complete...');
   let status = '';
   do {
     try {
       const res = await openai.beta.threads.runs.retrieve(threadId, runId);
       status = res.status;
+      
+      
+      if (status === 'requires_action') {
+        const requires_action = res.required_action.submit_tool_outputs.tool_calls;                
+
+        let toolsOutput = [];
+        for ( const action of requires_action ) {
+           const function_name = action.function.name;
+            const function_arguments = JSON.parse(action.function.arguments);
+
+            if (function_name === 'Get_Options') {
+              const { question, options } = function_arguments;
+              const output = await Get_Options(question, options);
+
+              console.log(output);
+
+              toolsOutput.push({ 
+                  tool_call_id: action.id,
+                  output: JSON.stringify(output)  
+              });
+            } else {
+              console.log('Unknown function:', function_name);
+            }
+
+            await openai.beta.threads.runs.submitToolOutputs(
+              threadId, 
+              runId, 
+              { tool_outputs: toolsOutput }
+            );
+      }
+    }
+      
       if (status === 'completed') {
         break;
       }
+      
     } catch (error) {
       console.error('Error checking run status:', error);
       throw error;
     }
+
     await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before checking again
   } while (status !== 'completed');
 }
 
-// Function to get the last message from the assistant
+//Function to get the last message from the assistant
 const getMessages = async (threadId="") => {
   if (!threadId) return []; 
 
@@ -157,7 +208,6 @@ app.post('/questions/:threadId', async (req, res) => {
     const { prompt } = req.body;
   
   if (!threadId || !prompt) throw new Error('Invalid request');
-
 
     const session = await StartSession(prompt, threadId);
     res.status(200).send({ message: session });

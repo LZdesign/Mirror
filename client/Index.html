@@ -40,7 +40,7 @@
     </header>
     <main>
       <!-- Hero Banner -->
-      <div class="grid">
+      <div class="grid contentContainer">
         <div class="hero-div flex-flow">
           <div class="header flex-item">
             <h1>Explore the Power of AI Coaching Today</h1>
@@ -76,11 +76,6 @@
                 
                 
                 
-                <!-- <div>
-                  <label for="area-of-improvement">What would you like to discuss</label>
-                </div>
- -->
-
                 
                 <div class="errorDiv">
                   <div class="errorMessage">  
@@ -105,12 +100,11 @@
               <form>
                 <div class="textAreaContainer">
                   <div>
-                    <label for="textArea">Take your time to answer. A more thoughtful reply will help your coach understand better. </label>
                     <p style="margin: 0;"><span id="textArea" class="textarea" role="textbox" contenteditable></span></p>
                   </div>
                 </div>
 
-                <button class="answer">Answer Honestly</button>
+                <button class="answer"><i data-feather="send"></i></button>
               </form>
             </div>
 
@@ -172,6 +166,10 @@
       <p>Copyright © The mirror App</p>
     </footer>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>  <script>
+    feather.replace();
+  </script>
   <script type="module" src="/assets/main.js"></script>
 </body>
 
